@@ -1,0 +1,1 @@
+C:\Development\git\tetembakan\C#\Client\Client\bin\Debug\Client.exe.config

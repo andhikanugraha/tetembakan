@@ -1,0 +1,5 @@
+C:\Users\M Reza MP\Desktop\P2PTracker\MainTracker\bin\Debug\MainTracker.exe
+C:\Users\M Reza MP\Desktop\P2PTracker\MainTracker\bin\Debug\MainTracker.pdb
+C:\Users\M Reza MP\Desktop\P2PTracker\MainTracker\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\M Reza MP\Desktop\P2PTracker\MainTracker\obj\x86\Debug\MainTracker.exe
+C:\Users\M Reza MP\Desktop\P2PTracker\MainTracker\obj\x86\Debug\MainTracker.pdb

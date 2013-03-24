@@ -15,3 +15,5 @@ C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\Client.exe
 C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\Client.pdb
 C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\RoomListControl.baml
 C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\RoomListControl.g.cs
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\CreateRoomControl.baml
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\CreateRoomControl.g.cs

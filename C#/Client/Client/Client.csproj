@@ -54,9 +54,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CreateRoomControl.xaml.cs">
+      <DependentUpon>CreateRoomControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RoomListControl.xaml.cs">
       <DependentUpon>RoomListControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="CreateRoomControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HandshakeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

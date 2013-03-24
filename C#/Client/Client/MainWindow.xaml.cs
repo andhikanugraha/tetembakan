@@ -23,6 +23,7 @@ namespace Client
     {
         public HandshakeControl Handshake = new HandshakeControl();
         public RoomListControl RoomList = new RoomListControl();
+        public CreateRoomControl CreateRoom = new CreateRoomControl();
 
         public MainWindow()
         {
@@ -31,6 +32,7 @@ namespace Client
             // Initialize individual controls
             InitHandshakeControl();
             InitRoomListControl();
+            InitCreateRoomControl();
 
             SwitchControl(Handshake);
         }
@@ -42,18 +44,41 @@ namespace Client
 
         public void InitHandshakeControl()
         {
-            Handshake.OnConnectButtonClick += new HandshakeControl.ConnectHandler(HandleConnect);
+            Handshake.ConnectButtonClick += new EventHandler(Handshake_Connect);
         }
 
-        public void HandleConnect(HandshakeControl control)
+        public void Handshake_Connect(object sender, EventArgs e)
         {
+            HandshakeControl control = (HandshakeControl)sender;
+
+            // TODO Connect magic here
             Debug.WriteLine(control.TrackerAddressTextBox.Text);
+
+            // TODO Populate list of rooms here
+
+            // TODO Only call this after connected
             SwitchControl(RoomList);
         }
 
         public void InitRoomListControl()
         {
+            RoomList.CreateRoomButtonClick += new EventHandler(RoomList_CreateRoom);
+        }
 
+        public void RoomList_CreateRoom(object sender, EventArgs e)
+        {
+            Debug.WriteLine(sender);
+            SwitchControl(CreateRoom);
+        }
+
+        public void InitCreateRoomControl()
+        {
+            CreateRoom.CancelButtonClick += new EventHandler(CreateRoom_Cancel);
+        }
+
+        public void CreateRoom_Cancel(object sender, EventArgs e)
+        {
+            SwitchControl(RoomList);
         }
     }
 }

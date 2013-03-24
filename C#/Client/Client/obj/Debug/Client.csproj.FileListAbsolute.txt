@@ -1,1 +1,17 @@
 C:\Development\git\tetembakan\C#\Client\Client\bin\Debug\Client.exe.config
+C:\Development\git\tetembakan\C#\Client\Client\bin\Debug\Client.exe
+C:\Development\git\tetembakan\C#\Client\Client\bin\Debug\Client.pdb
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\HandshakeControl.baml
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\MainWindow.baml
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\HandshakeControl.g.cs
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\MainWindow.g.cs
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\App.g.cs
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\Client_MarkupCompile.cache
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\Client.g.resources
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\Client.exe
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\Client.pdb
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\RoomListControl.baml
+C:\Development\git\tetembakan\C#\Client\Client\obj\Debug\RoomListControl.g.cs

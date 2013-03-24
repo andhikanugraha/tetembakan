@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="Client.RoomListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="480" d:DesignWidth="640">
+    <Grid>
+        <TextBlock TextWrapping="Wrap" Text="Rooms" VerticalAlignment="Top" TextAlignment="Left" FontSize="36" FontFamily="Segoe UI Light" Height="66" Margin="30"/>
+        <ListView HorizontalAlignment="Left" Height="131" Margin="30,101,0,0" VerticalAlignment="Top" Width="178">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</UserControl>

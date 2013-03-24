@@ -19,8 +19,8 @@ namespace Client
     /// </summary>
     public partial class CreateRoomControl : UserControl
     {
-        public event EventHandler CancelButtonClick;
-        public event EventHandler CreateRoomButtonClick;
+        public event EventHandler Cancel;
+        public event EventHandler CreateRoom;
 
         public CreateRoomControl()
         {
@@ -29,14 +29,14 @@ namespace Client
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CancelButtonClick != null)
-                CancelButtonClick(this, e);
+            if (Cancel != null)
+                Cancel(this, e);
         }
 
         private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CreateRoomButton != null)
-                CreateRoomButtonClick(this, e);
+            if (CreateRoom != null)
+                CreateRoom(this, e);
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Client
         public HandshakeControl Handshake = new HandshakeControl();
         public RoomListControl RoomList = new RoomListControl();
         public CreateRoomControl CreateRoom = new CreateRoomControl();
+        public InsideRoomControl InsideRoom = new InsideRoomControl();
 
         public MainWindow()
         {
@@ -33,6 +34,7 @@ namespace Client
             InitHandshakeControl();
             InitRoomListControl();
             InitCreateRoomControl();
+            InitInsideRoomControl();
 
             SwitchControl(Handshake);
         }
@@ -71,13 +73,45 @@ namespace Client
             SwitchControl(CreateRoom);
         }
 
+        public void RoomList_JoinRoom(object sender, EventArgs e)
+        {
+            // TODO magic here
+
+            // TODO only call the following code after success
+
+            // TODO Change the title of the room accordingly
+            InsideRoom.RoomTitle.Text = "Room Title";
+
+            SwitchControl(InsideRoom);
+        }
+
         public void InitCreateRoomControl()
         {
-            CreateRoom.CancelButtonClick += new EventHandler(CreateRoom_Cancel);
+            CreateRoom.Cancel += new EventHandler(CreateRoom_Cancel);
+            CreateRoom.CreateRoom += new EventHandler(CreateRoom_CreateRoom);
+        }
+
+        public void CreateRoom_CreateRoom(object sender, EventArgs e)
+        {
+            SwitchControl(InsideRoom);
         }
 
         public void CreateRoom_Cancel(object sender, EventArgs e)
         {
+            SwitchControl(RoomList);
+        }
+
+        public void InitInsideRoomControl()
+        {
+            InsideRoom.LeaveRoom += new EventHandler(InsideRoom_LeaveRoom);
+        }
+
+        public void InsideRoom_LeaveRoom(object sender, EventArgs e)
+        {
+            // TODO QUIT magic here
+
+
+            // TODO Only call this after success
             SwitchControl(RoomList);
         }
     }

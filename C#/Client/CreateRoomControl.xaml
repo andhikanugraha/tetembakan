@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Client.CreateRoomControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="480" d:DesignWidth="640
+             ">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock TextWrapping="Wrap" Text="Create Room" VerticalAlignment="Top" TextAlignment="Left" FontSize="36" FontFamily="Segoe UI Light" Height="66" Margin="30,30,30,0" Grid.ColumnSpan="2"/>
+        <Label Content="Room Name" HorizontalAlignment="Left" Margin="30,0,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+        <TextBox x:Name="RoomNameTextBox" HorizontalAlignment="Left" Height="23" Margin="140,4,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="CreateRoomButton" Content="Create Room" HorizontalAlignment="Left" Margin="30,10,15,30" Grid.Row="2
+                " VerticalAlignment="Top" Width="140" Height="30" IsDefault="True" Click="CreateRoomButton_Click"/>
+        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="15,10,30,0" Grid.Row="2                 " VerticalAlignment="Top" Width="120" Height="30" IsCancel="True" Click="CancelButton_Click"/>
+    </Grid>
+</UserControl>

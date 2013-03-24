@@ -13,6 +13,8 @@ namespace Client
         private Socket soc;
         private IPAddress remoteIP;
         private IPEndPoint remoteEndpoint;
+        private byte[] pstr;
+        private byte[] reserved = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
         private string _serverIP;
         public string ServerIP
@@ -33,6 +35,8 @@ namespace Client
 
         public Client()
         {
+            pstr = Encoding.ASCII.GetBytes("GunbondGame");
+
             try
             {
                 soc = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -57,6 +61,35 @@ namespace Client
         public void Send(byte[] data)
         {
             soc.Send(data);
+        }
+
+        public void Handshake()
+        {
+            byte[] message = new byte[20];
+            pstr.CopyTo(message, 0);
+            reserved.CopyTo(message, pstr.Length);
+
+            byte[] append = { Convert.ToByte(135) };
+            append.CopyTo(message, pstr.Length + reserved.Length);
+
+            Send(message);
+        }
+
+        public void KeepAlive(int peerID)
+        {
+            byte[] message = new byte[20];
+            pstr.CopyTo(message, 0);
+            reserved.CopyTo(message, pstr.Length);
+
+            byte[] append = { Convert.ToByte(135) };
+            append.CopyTo(message, pstr.Length + reserved.Length);
+
+            byte[] append2 = BitConverter.GetBytes(peerID);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(append2);
+            append2.CopyTo(message, pstr.Length + reserved.Length + append.Length + append2.Length);
+
+            Send(message);
         }
     }
 }

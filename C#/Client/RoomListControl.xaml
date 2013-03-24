@@ -15,10 +15,11 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock TextWrapping="Wrap" Text="Rooms" VerticalAlignment="Top" TextAlignment="Left" FontSize="36" FontFamily="Segoe UI Light" Height="66" Margin="30,30,30,0" Grid.ColumnSpan="2"/>
-        <ListView Margin="30,0" Grid.Row="1">
+        <ListView x:Name="RoomListView" Margin="30,0" Grid.Row="1" SelectionMode="Single">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="Peer ID" Width="100" DisplayMemberBinding="{Binding Path=ID}"/>
+                    <GridViewColumn Header="Room ID" Width="100" DisplayMemberBinding="{Binding Path=PeerID}"/>
                 </GridView>
             </ListView.View>
             

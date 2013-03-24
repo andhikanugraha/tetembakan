@@ -60,6 +60,8 @@
     <Compile Include="InsideRoomControl.xaml.cs">
       <DependentUpon>InsideRoomControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Peer.cs" />
+    <Compile Include="Room.cs" />
     <Compile Include="RoomListControl.xaml.cs">
       <DependentUpon>RoomListControl.xaml</DependentUpon>
     </Compile>

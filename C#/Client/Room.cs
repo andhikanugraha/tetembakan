@@ -8,16 +8,17 @@ using System.Windows;
 
 namespace Client
 {
-    class Room
+    public class Room
     {
         public Int32 ID { get; set; }
         public Int32 PeerID { get; set; }
-        public List<Peer> Peers { get; set; }
+        // public List<Peer> Peers { get; set; }
     }
 
-    class RoomViewModel : INotifyPropertyChanged
+    public class RoomViewModel
     {
         public ObservableCollection<Room> Rooms { get; set; }
+        public Room CurrentRoom { get; set; }
 
         public RoomViewModel()
         {
@@ -31,6 +32,20 @@ namespace Client
             {
                 Rooms.Add(room);
             }
+        }
+
+        public void ClearRooms()
+        {
+            Rooms.Clear();
+        }
+
+        public void AddRoom(Room room)
+        {
+            Rooms.Add(room);
+        }
+
+        public void PropertyChanged()
+        {
         }
     }
 }

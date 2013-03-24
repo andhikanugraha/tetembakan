@@ -22,9 +22,34 @@ namespace Client
         public event EventHandler JoinRoomButtonClick;
         public event EventHandler CreateRoomButtonClick;
 
+        public RoomViewModel RoomViewModel;
+
         public RoomListControl()
         {
             InitializeComponent();
+
+            RoomViewModel = new RoomViewModel();
+
+            //var room = new Room();
+            //room.ID = 32;
+            //room.PeerID = 32;
+
+            //RoomViewModel.AddRoom(room);
+            //RoomViewModel.AddRoom(room);
+            //RoomViewModel.AddRoom(room);
+            //RoomViewModel.AddRoom(room);
+            RoomListView.DataContext = RoomViewModel;
+            RoomListView.ItemsSource = RoomViewModel.Rooms;
+        }
+
+        public void PopulateRooms(IEnumerable<Room> rooms)
+        {
+            RoomViewModel.PopulateRooms(rooms);
+        }
+
+        public Room GetSelectedRoom()
+        {
+            return (Room)RoomListView.SelectedItem;
         }
 
         private void CreateRoomButton_Click(object sender, RoutedEventArgs e)

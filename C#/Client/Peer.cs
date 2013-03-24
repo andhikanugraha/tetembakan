@@ -8,8 +8,8 @@ namespace Client
 {
     class Peer
     {
-        public string Name { public get; private set; }
-        public string ID { public get; private set; }
+        public string Name { get; set; }
+        public string ID { get; set; }
 
         Peer(string Name, string ID)
         {

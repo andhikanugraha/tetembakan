@@ -25,8 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 #include <SocketHandler.h>
 #include <ListenSocket.h>
-#include "DisplaySocket.h"
-#include "SendSocket.h"
+#include "Tracker.h"
 #include "stdio.h"
 #include "signal.h"
 
@@ -36,7 +35,7 @@ int main(int argc, char *argv[])
 {
 	int input,x;
 	SocketHandler h;
-	ListenSocket<DisplaySocket> l(h);
+	ListenSocket<Tracker> l(h);
 	std::string text = argc > 1 ? argv[1] : "";
 	l.Bind(12346);
 	h.Add(&l);

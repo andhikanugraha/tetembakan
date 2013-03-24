@@ -19,8 +19,7 @@ namespace Client
     /// </summary>
     public partial class HandshakeControl : UserControl
     {
-        public delegate void ConnectHandler(HandshakeControl control);
-        public event ConnectHandler OnConnectButtonClick;
+        public event EventHandler ConnectButtonClick;
 
         public HandshakeControl()
         {
@@ -29,8 +28,8 @@ namespace Client
 
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
-            if (OnConnectButtonClick != null)
-                OnConnectButtonClick(this);
+            if (ConnectButtonClick != null)
+                ConnectButtonClick(this, e);
         }
     }
 }

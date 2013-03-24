@@ -15,28 +15,28 @@ using System.Windows.Shapes;
 namespace Client
 {
     /// <summary>
-    /// Interaction logic for RoomListControl.xaml
+    /// Interaction logic for CreateRoomControl.xaml
     /// </summary>
-    public partial class RoomListControl : UserControl
+    public partial class CreateRoomControl : UserControl
     {
-        public event EventHandler JoinRoomButtonClick;
+        public event EventHandler CancelButtonClick;
         public event EventHandler CreateRoomButtonClick;
 
-        public RoomListControl()
+        public CreateRoomControl()
         {
             InitializeComponent();
         }
 
-        private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CreateRoomButtonClick != null)
-                CreateRoomButtonClick(this, e);
+            if (CancelButtonClick != null)
+                CancelButtonClick(this, e);
         }
 
-        private void JoinRoomButton_Click(object sender, RoutedEventArgs e)
+        private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
         {
-            if (JoinRoomButtonClick != null)
-                JoinRoomButtonClick(this, e);
+            if (CreateRoomButton != null)
+                CreateRoomButtonClick(this, e);
         }
     }
 }

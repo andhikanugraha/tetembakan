@@ -56,15 +56,27 @@ namespace Client
             // TODO Connect magic here
             Debug.WriteLine(control.TrackerAddressTextBox.Text);
 
-            // TODO Populate list of rooms here
+            RoomList.ViewModel.ClearRooms();
 
-            // TODO Only call this after connected
+            // TODO Populate list of rooms here
+            Random r = new Random();
+
+            for (int i = 0; i < r.Next(10,20); ++i)
+            {
+                var room = new Room();
+                room.ID = r.Next(1048576);
+                room.PeerID = r.Next(1048576);
+                RoomList.ViewModel.AddRoom(room);
+            }
+
+            // Switch to the room list
             SwitchControl(RoomList);
         }
 
         public void InitRoomListControl()
         {
             RoomList.CreateRoomButtonClick += new EventHandler(RoomList_CreateRoom);
+            RoomList.JoinRoomButtonClick += new EventHandler(RoomList_JoinRoom);
         }
 
         public void RoomList_CreateRoom(object sender, EventArgs e)
@@ -76,11 +88,29 @@ namespace Client
         public void RoomList_JoinRoom(object sender, EventArgs e)
         {
             // TODO magic here
+            Room room = RoomList.GetSelectedRoom();
+
+            if (room == null)
+            {
+                // No room was selected.
+                return;
+            }
+            else
+            {
+                // A room was selected.
+                // Peer ID: room.PeerID
+                // Room ID: room.ID
+                
+                // TODO Joining magic
+
+                // Set the contents
+                // TODO replace this with databinding
+                InsideRoom.RoomTitle.Text = "Room #" + room.ID.ToString();
+            }
 
             // TODO only call the following code after success
 
             // TODO Change the title of the room accordingly
-            InsideRoom.RoomTitle.Text = "Room Title";
 
             SwitchControl(InsideRoom);
         }

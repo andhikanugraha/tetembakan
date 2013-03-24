@@ -22,13 +22,13 @@ namespace Client
         public event EventHandler JoinRoomButtonClick;
         public event EventHandler CreateRoomButtonClick;
 
-        public RoomViewModel RoomViewModel;
+        public RoomViewModel ViewModel;
 
         public RoomListControl()
         {
             InitializeComponent();
 
-            RoomViewModel = new RoomViewModel();
+            ViewModel = new RoomViewModel();
 
             //var room = new Room();
             //room.ID = 32;
@@ -38,13 +38,13 @@ namespace Client
             //RoomViewModel.AddRoom(room);
             //RoomViewModel.AddRoom(room);
             //RoomViewModel.AddRoom(room);
-            RoomListView.DataContext = RoomViewModel;
-            RoomListView.ItemsSource = RoomViewModel.Rooms;
+            RoomListView.DataContext = ViewModel;
+            RoomListView.ItemsSource = ViewModel.Rooms;
         }
 
         public void PopulateRooms(IEnumerable<Room> rooms)
         {
-            RoomViewModel.PopulateRooms(rooms);
+            ViewModel.PopulateRooms(rooms);
         }
 
         public Room GetSelectedRoom()

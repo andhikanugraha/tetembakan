@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -21,9 +22,19 @@ namespace Client
     {
         public event EventHandler LeaveRoom;
 
+        public InsideRoomViewModel ViewModel;
+
         public InsideRoomControl()
         {
             InitializeComponent();
+
+            ViewModel = new InsideRoomViewModel();
+            ViewModel.PropertyChanged += new PropertyChangedEventHandler(OnPropertyChange);
+        }
+
+        public void OnPropertyChange(object sender, PropertyChangedEventArgs e)
+        {
+            RoomTitle.Text = "Room #" + ViewModel.Room.ID.ToString();
         }
 
         private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)

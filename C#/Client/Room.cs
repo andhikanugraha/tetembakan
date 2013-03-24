@@ -15,12 +15,12 @@ namespace Client
         // public List<Peer> Peers { get; set; }
     }
 
-    public class RoomViewModel
+    public class RoomListViewModel
     {
         public ObservableCollection<Room> Rooms { get; set; }
         public Room CurrentRoom { get; set; }
 
-        public RoomViewModel()
+        public RoomListViewModel()
         {
             Rooms = new ObservableCollection<Room>();
         }
@@ -46,6 +46,43 @@ namespace Client
 
         public void PropertyChanged()
         {
+        }
+    }
+
+    public class InsideRoomViewModel : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private Room _room;
+
+        public Room Room
+        {
+            get
+            {
+                return this._room;
+            }
+
+            set
+            {
+                if (value != this._room)
+                {
+                    this._room = value;
+                    RoomChanged();
+                }
+            }
+        }
+
+        private void RoomChanged()
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Room"));
+            }
+        }
+
+        public InsideRoomViewModel(Room room = null)
+        {
+            Room = room;
         }
     }
 }

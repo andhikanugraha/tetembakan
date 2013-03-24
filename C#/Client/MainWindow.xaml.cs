@@ -104,8 +104,7 @@ namespace Client
                 // TODO Joining magic
 
                 // Set the contents
-                // TODO replace this with databinding
-                InsideRoom.RoomTitle.Text = "Room #" + room.ID.ToString();
+                InsideRoom.ViewModel.Room = room;
             }
 
             // TODO only call the following code after success

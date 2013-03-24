@@ -22,13 +22,13 @@ namespace Client
         public event EventHandler JoinRoomButtonClick;
         public event EventHandler CreateRoomButtonClick;
 
-        public RoomViewModel ViewModel;
+        public RoomListViewModel ViewModel;
 
         public RoomListControl()
         {
             InitializeComponent();
 
-            ViewModel = new RoomViewModel();
+            ViewModel = new RoomListViewModel();
 
             //var room = new Room();
             //room.ID = 32;

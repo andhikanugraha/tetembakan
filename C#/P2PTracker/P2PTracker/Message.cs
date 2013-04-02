@@ -30,29 +30,7 @@ namespace P2PTracker
         public static int MAX_PLAYER_NUM = 8;
         public static string ROOM_ID = "dummy room";
 
-        List<byte[]> message;
-
-        byte[] Payload
-        {
-            public get
-            {
-                int totalLength = 0;
-                foreach (byte[] bA in message)
-                {
-                    totalLength += bA.Length;
-                }
-
-                byte[] ret = new byte[totalLength];
-                int cursor = 0;
-                foreach (byte[] bA in message)
-                {
-                    Array.Copy(bA, 0, ret, cursor, bA.Length);
-                    cursor += bA.Length;
-                }
-
-                return ret;
-            }
-        }
+        public List<byte[]> message { get; set; }
 
         public List<byte[]> getMessage()
         {
@@ -61,6 +39,25 @@ namespace P2PTracker
         public void setMessage(List<byte[]> new_message)
         {
             message = new_message;
+        }
+
+        public byte[] GetPayload()
+        {
+            int totalLength = 0;
+            foreach (byte[] source in message)
+            {
+                totalLength += source.Length;
+            }
+
+            byte[] payload = new byte[totalLength];
+            int cursor = 0;
+            foreach (byte[] source in message)
+            {
+                Array.Copy(source, 0, payload, cursor, source.Length);
+                cursor += source.Length;
+            }
+
+            return payload;
         }
 
         public Message()
@@ -72,7 +69,48 @@ namespace P2PTracker
         {
             message = new_message;
         }
-        
+
+        public static string getPSTR(byte[] message)
+        {
+            byte[] result = new byte[11];
+            Array.Copy(message, 0, result, 0, 11);
+            return Encoding.Default.GetString(result);
+        }
+
+        public static string getReserved(byte[] message)
+        {
+            byte[] result = new byte[8];
+            Array.Copy(message, 11, result, 0, 8);
+            return Encoding.Default.GetString(result);
+        }
+
+        public static int getCode(byte[] message)
+        {
+            byte result = message[19];
+            return result;
+        }
+
+        public static int getPeerId(byte[] message)
+        {
+            byte[] result = new byte[4];
+            Array.Copy(message, 20, result, 0, 4);
+            return BitConverter.ToInt32(result, 0);
+        }
+
+        public static String getRoomId(byte[] message)
+        {
+            byte[] result = new byte[4];
+            Array.Copy(message, 24, result, 0, 50);
+            return BitConverter.ToString(result, 0);
+        }
+
+        public static String getRoomId2(byte[] message)
+        {
+            byte[] result = new byte[4];
+            Array.Copy(message, 28, result, 0, 50);
+            return BitConverter.ToString(result, 0);
+        }
+
         public static byte[] dataToByte(string data, int allocation)
         {
             byte[] result = new byte[allocation];

@@ -34,7 +34,7 @@ namespace P2PTracker
 
         byte[] Payload
         {
-            get
+            public get
             {
                 int totalLength = 0;
                 foreach (byte[] bA in message)
@@ -179,5 +179,13 @@ namespace P2PTracker
             return new Message(buffer);
         }
 
+        public static Message Handshake()
+        {
+            List<byte[]> buffer = new List<byte[]>();
+            buffer.Add(dataToByte(PSTR, PSTR_SIZE));
+            buffer.Add(RESERVED);
+            buffer.Add(new byte[] { HANDSHAKE_CODE });
+            return new Message(buffer);
+        }
     }
 }

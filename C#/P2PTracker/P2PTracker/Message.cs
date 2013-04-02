@@ -32,6 +32,28 @@ namespace P2PTracker
 
         List<byte[]> message;
 
+        byte[] Payload
+        {
+            get
+            {
+                int totalLength = 0;
+                foreach (byte[] bA in message)
+                {
+                    totalLength += bA.Length;
+                }
+
+                byte[] ret = new byte[totalLength];
+                int cursor = 0;
+                foreach (byte[] bA in message)
+                {
+                    Array.Copy(bA, 0, ret, cursor, bA.Length);
+                    cursor += bA.Length;
+                }
+
+                return ret;
+            }
+        }
+
         public List<byte[]> getMessage()
         {
             return message;

@@ -19,7 +19,7 @@ namespace Sister2
             {
                 //create a new client socket ...
                 c.m_socClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                String szIPSelected = "167.205.86.253";
+                String szIPSelected = "127.0.0.1";
                 String szPort = "8221";
                 int alPort = System.Convert.ToInt16(szPort, 10);
 

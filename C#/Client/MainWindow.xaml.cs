@@ -1,4 +1,5 @@
-﻿using System;
+﻿using P2PTracker;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -39,6 +40,14 @@ namespace Client
             SwitchControl(Handshake);
         }
 
+        public void ShowMessageBox(string message,
+            MessageBoxButton button = MessageBoxButton.OK,
+            MessageBoxImage icon = MessageBoxImage.Error)
+        {
+            string caption = "GunBond";
+            MessageBox.Show(message, caption, button, icon);
+        }
+
         public void SwitchControl(UserControl newControl)
         {
             Content = newControl;
@@ -55,22 +64,33 @@ namespace Client
 
             // TODO Connect magic here
             Debug.WriteLine(control.TrackerAddressTextBox.Text);
-
-            RoomList.ViewModel.ClearRooms();
-
-            // TODO Populate list of rooms here
-            Random r = new Random();
-
-            for (int i = 0; i < r.Next(10,20); ++i)
+            try
             {
-                var room = new Room();
-                room.ID = r.Next(1048576);
-                room.PeerID = r.Next(1048576);
-                RoomList.ViewModel.AddRoom(room);
-            }
+                Connection p = new Connection(control.TrackerAddressTextBox.Text);
 
-            // Switch to the room list
-            SwitchControl(RoomList);
+                p.sendMessage(Message.Connect());
+
+                RoomList.ViewModel.ClearRooms();
+
+                // TODO Populate list of rooms here
+                Random r = new Random();
+
+                for (int i = 0; i < r.Next(10, 20); ++i)
+                {
+                    var room = new Room();
+                    room.ID = r.Next(1048576).ToString("X");
+                    room.PeerID = r.Next(1048576).ToString("X");
+                    RoomList.ViewModel.AddRoom(room);
+                }
+
+                // Switch to the room list
+                SwitchControl(RoomList);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                ShowMessageBox(ex.Message);
+            }
         }
 
         public void InitRoomListControl()

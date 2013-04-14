@@ -1,5 +1,4 @@
-﻿using P2PTracker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -7,11 +6,11 @@ using System.Text;
 
 namespace Client
 {
-    class Connection
+    public class Connection
     {
         Socket m_socClient;
         AsyncCallback pfnWorkerCallBack;
-        
+
         public Connection(string IPAddress)
         {
             //create a new client socket ...
@@ -85,14 +84,17 @@ namespace Client
             }
         }
 
-        public void sendMessage(Message message)
+        public void sendMessage(byte[] message)
         {
-            m_socClient.Send(message.Payload);
+            m_socClient.Send(message);
         }
 
-        public void receive()
+        public byte[] receive()
         {
-
+            byte[] message = new byte[m_socClient.ReceiveBufferSize];
+            int result = m_socClient.Receive(message);
+            Console.WriteLine("result: " + result);
+            return message;
         }
     }
 }

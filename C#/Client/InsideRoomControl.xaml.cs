@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MessageFormat;
 
 namespace Client
 {
@@ -34,13 +35,30 @@ namespace Client
 
         public void OnPropertyChange(object sender, PropertyChangedEventArgs e)
         {
-            RoomTitle.Text = "Room #" + ViewModel.Room.ID.ToString();
+            RoomTitle.Text = "Room #" + ViewModel.Room.room_id.ToString();
         }
 
         private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)
         {
             if (LeaveRoom != null)
+            {
                 LeaveRoom(this, e);
+
+                //Console.WriteLine("Masuk join");
+                //Console.WriteLine("peerID: "+ Utility.getPeerID());
+                //Console.WriteLine("current room: " + GetSelectedRoom().room_id);
+                Utility.getConnection().sendMessage(Message.Quit(Utility.getPeerID()));
+                byte[] message = Utility.getConnection().receive();
+                Console.WriteLine("message code: " + Message.getCode(message));
+
+                if (Message.getCode(message) == Message.SUCCESS_CODE)
+                {
+                    MessageBox.Show("Success to leave the room.");
+                }
+
+                message = Utility.getConnection().receive();
+                Console.WriteLine("message code: " + Message.getCode(message));
+            }
         }
     }
 }

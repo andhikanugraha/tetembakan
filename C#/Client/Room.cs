@@ -5,15 +5,18 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using MessageFormat;
 
 namespace Client
 {
+    /*
     public class Room
     {
         public Int32 ID { get; set; }
         public Int32 PeerID { get; set; }
         // public List<Peer> Peers { get; set; }
     }
+    */
 
     public class RoomListViewModel
     {

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="640">
-    <Grid>
+    <Grid Loaded="Grid_Loaded">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
@@ -18,8 +18,8 @@
         <ListView x:Name="RoomListView" Margin="30,0" Grid.Row="1" SelectionMode="Single">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Peer ID" Width="100" DisplayMemberBinding="{Binding Path=ID}"/>
-                    <GridViewColumn Header="Room ID" Width="100" DisplayMemberBinding="{Binding Path=PeerID}"/>
+                    <GridViewColumn Header="Peer ID" Width="100" DisplayMemberBinding="{Binding Path=peer_id}"/>
+                    <GridViewColumn Header="Room ID" Width="100" DisplayMemberBinding="{Binding Path=room_id}"/>
                 </GridView>
             </ListView.View>
             

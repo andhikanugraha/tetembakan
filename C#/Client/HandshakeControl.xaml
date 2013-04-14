@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="160"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="TrackerAddressTextBox" Grid.Column="1" Height="30" TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Center" MaxLines="1" Padding="0,5,0,0" Text="Tracker IP Address"/>
+            <TextBox x:Name="TrackerAddressTextBox" Grid.Column="1" Height="30" TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Center" MaxLines="1" Padding="0,5,0,0" Text="Tracker IP Address" GotFocus="TrackerAddressTextBox_GotFocus" LostFocus="TrackerAddressTextBox_LostFocus" MouseEnter="TrackerAddressTextBox_MouseEnter" MouseLeave="TrackerAddressTextBox_MouseLeave" />
         </Grid>
         <Grid HorizontalAlignment="Stretch" Grid.Row="4" VerticalAlignment="Stretch" Margin="0">
             <Grid.RowDefinitions>

@@ -31,5 +31,37 @@ namespace Client
             if (ConnectButtonClick != null)
                 ConnectButtonClick(this, e);
         }
+
+        private void TrackerAddressTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (TrackerAddressTextBox.Text.Equals("Tracker IP Address"))
+            {
+                TrackerAddressTextBox.Text = "";
+            }
+        }
+
+        private void TrackerAddressTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (TrackerAddressTextBox.Text.Equals(""))
+            {
+                TrackerAddressTextBox.Text = "Tracker IP Address";
+            }
+        }
+
+        private void TrackerAddressTextBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (TrackerAddressTextBox.Text.Equals("Tracker IP Address"))
+            {
+                TrackerAddressTextBox.Text = "";
+            }
+        }
+
+        private void TrackerAddressTextBox_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (TrackerAddressTextBox.Text.Equals(""))
+            {
+                TrackerAddressTextBox.Text = "Tracker IP Address";
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using P2PTracker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MessageFormat;
 
 namespace Client
 {
@@ -26,7 +26,7 @@ namespace Client
         public RoomListControl RoomList = new RoomListControl();
         public CreateRoomControl CreateRoom = new CreateRoomControl();
         public InsideRoomControl InsideRoom = new InsideRoomControl();
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -66,25 +66,34 @@ namespace Client
             Debug.WriteLine(control.TrackerAddressTextBox.Text);
             try
             {
-                Connection p = new Connection(control.TrackerAddressTextBox.Text);
-
-                p.sendMessage(Message.Connect());
+                Utility.setConnection(control.TrackerAddressTextBox.Text);
+                Utility.getConnection().sendMessage(Message.HandShake());
 
                 RoomList.ViewModel.ClearRooms();
 
                 // TODO Populate list of rooms here
+                /*
                 Random r = new Random();
 
                 for (int i = 0; i < r.Next(10, 20); ++i)
                 {
                     var room = new Room();
-                    room.ID = r.Next(1048576).ToString("X");
-                    room.PeerID = r.Next(1048576).ToString("X");
+                    room.ID = r.Next(1048576);//.ToString("X");
+                    room.PeerID = r.Next(1048576);//.ToString("X");
                     RoomList.ViewModel.AddRoom(room);
                 }
-
+                */
                 // Switch to the room list
-                SwitchControl(RoomList);
+                byte[] message = Utility.getConnection().receive();
+                Console.WriteLine("message code: " + Message.getCode(message));
+                if (Message.getCode(message) == Message.HANDSHAKE_CODE)
+                {
+                    SwitchControl(RoomList);
+                    Utility.setPeerID(Message.getPeerId(message));
+                    Console.WriteLine("peerID: " + Utility.getPeerID());
+                    message = Utility.getConnection().receive();
+                    Console.WriteLine("message code: " + Message.getCode(message));        
+                }
             }
             catch (Exception ex)
             {
@@ -101,7 +110,8 @@ namespace Client
 
         public void RoomList_CreateRoom(object sender, EventArgs e)
         {
-            Debug.WriteLine(sender);
+            //MessageBox.Show("Create");
+            //Debug.WriteLine(sender);
             SwitchControl(CreateRoom);
         }
 
@@ -142,7 +152,15 @@ namespace Client
 
         public void CreateRoom_CreateRoom(object sender, EventArgs e)
         {
-            SwitchControl(InsideRoom);
+            string roomID = ((CreateRoomControl)sender).RoomNameTextBox.Text;
+
+            Utility.getConnection().sendMessage(Message.Create(Utility.getPeerID(), Message.MAX_PLAYER_NUM, roomID));
+            byte[] message = Utility.getConnection().receive();
+            Console.WriteLine("message code: " + Message.getCode(message));
+            if (Message.getCode(message) == Message.SUCCESS_CODE)
+            {
+                SwitchControl(InsideRoom);
+            }
         }
 
         public void CreateRoom_Cancel(object sender, EventArgs e)
@@ -159,9 +177,13 @@ namespace Client
         {
             // TODO QUIT magic here
 
-
+            Utility.getConnection().sendMessage(Message.Quit(Utility.getPeerID()));
             // TODO Only call this after success
-            SwitchControl(RoomList);
+            byte[] message = Utility.getConnection().receive();
+            if (Message.getCode(message) == Message.SUCCESS_CODE)
+            {
+                SwitchControl(RoomList);
+            }
         }
     }
 }

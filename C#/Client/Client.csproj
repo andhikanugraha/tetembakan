@@ -54,17 +54,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Connection.cs" />
     <Compile Include="CreateRoomControl.xaml.cs">
       <DependentUpon>CreateRoomControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="InsideRoomControl.xaml.cs">
       <DependentUpon>InsideRoomControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Peer.cs" />
+    <Compile Include="Peer2.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="RoomListControl.xaml.cs">
       <DependentUpon>RoomListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utility.cs" />
     <Page Include="CreateRoomControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -125,9 +127,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\P2PTracker\P2PTracker\Tracker.csproj">
-      <Project>{e2469a56-84c0-4043-959e-fad16d953a51}</Project>
-      <Name>Tracker</Name>
+    <ProjectReference Include="..\MessageFormat\MessageFormat\MessageFormat.csproj">
+      <Project>{343E49DA-32E1-4334-8B3E-767BC7E2E3D6}</Project>
+      <Name>MessageFormat</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

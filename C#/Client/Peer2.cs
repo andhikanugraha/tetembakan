@@ -6,12 +6,12 @@ using System.Windows;
 
 namespace Client
 {
-    class Peer
+    class Peer2
     {
         public string Name { get; set; }
         public string ID { get; set; }
 
-        Peer(string Name, string ID)
+        Peer2(string Name, string ID)
         {
             this.Name = Name;
             this.ID = ID;

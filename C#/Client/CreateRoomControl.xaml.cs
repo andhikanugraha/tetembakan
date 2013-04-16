@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MessageFormat;
 
 namespace Client
 {
@@ -36,7 +37,23 @@ namespace Client
         private void CreateRoomButton_Click(object sender, RoutedEventArgs e)
         {
             if (CreateRoom != null)
+            {
                 CreateRoom(this, e);
+                string roomID = RoomNameTextBox.Text;
+                
+                Utility.getConnection().sendMessage(Message.Create(Utility.getPeerID(), Message.MAX_PLAYER_NUM, roomID));
+                byte[] message = Utility.getConnection().receive();
+                Console.WriteLine("message code: " + Message.getCode(message));
+                if (Message.getCode(message) == Message.SUCCESS_CODE)
+                {
+                    Console.WriteLine("message code: " + Message.getCode(message));
+                    Utility.setRoomID(roomID);
+                }
+
+                message = Utility.getConnection().receive();
+                Console.WriteLine("message code: " + Message.getCode(message));
+                
+            }
         }
     }
 }

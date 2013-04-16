@@ -123,10 +123,14 @@ namespace Client
             if (room == null)
             {
                 // No room was selected.
+                MessageBox.Show("no room was selected.");
                 return;
             }
             else
             {
+                MessageBox.Show("room: " + room.room_id);
+                MessageBox.Show("IPAddress: " + room.creatorIPAddress);
+                
                 // A room was selected.
                 // Peer ID: room.PeerID
                 // Room ID: room.ID
@@ -134,14 +138,14 @@ namespace Client
                 // TODO Joining magic
 
                 // Set the contents
-                InsideRoom.ViewModel.Room = room;
+                //InsideRoom.ViewModel.Room = room;
+                SwitchControl(InsideRoom);
             }
 
             // TODO only call the following code after success
 
             // TODO Change the title of the room accordingly
 
-            SwitchControl(InsideRoom);
         }
 
         public void InitCreateRoomControl()
@@ -152,15 +156,7 @@ namespace Client
 
         public void CreateRoom_CreateRoom(object sender, EventArgs e)
         {
-            string roomID = ((CreateRoomControl)sender).RoomNameTextBox.Text;
-
-            Utility.getConnection().sendMessage(Message.Create(Utility.getPeerID(), Message.MAX_PLAYER_NUM, roomID));
-            byte[] message = Utility.getConnection().receive();
-            Console.WriteLine("message code: " + Message.getCode(message));
-            if (Message.getCode(message) == Message.SUCCESS_CODE)
-            {
-                SwitchControl(InsideRoom);
-            }
+            SwitchControl(InsideRoom);
         }
 
         public void CreateRoom_Cancel(object sender, EventArgs e)
@@ -176,14 +172,7 @@ namespace Client
         public void InsideRoom_LeaveRoom(object sender, EventArgs e)
         {
             // TODO QUIT magic here
-
-            Utility.getConnection().sendMessage(Message.Quit(Utility.getPeerID()));
-            // TODO Only call this after success
-            byte[] message = Utility.getConnection().receive();
-            if (Message.getCode(message) == Message.SUCCESS_CODE)
-            {
-                SwitchControl(RoomList);
-            }
+            SwitchControl(RoomList);
         }
     }
 }

@@ -27,6 +27,8 @@ namespace MessageFormat
         public const byte JOIN_CODE = 253;
         public const byte START_CODE = 252;
         public const byte QUIT_CODE = 235;
+        public const byte INSIDEROOM_CODE = 201;
+        public const byte DUMMY_CODE = 181;
 
         public const int MAX_PLAYER_NUM = 8;
         public const string ROOM_ID = "dummy room";
@@ -131,22 +133,76 @@ namespace MessageFormat
                     room.neighbor.Add(p);
                 }
 
-                byte room_id = 0;
                 room.room_id = "";
                 for(int x = 0; x < 50; ++x)
                 {
                     //Console.WriteLine("message ke-{0}: " + (char)message[24 + iterator + x], x);
                     //room_id = (byte)((message[24 + iterator + (5 * x)] << 4 & 0xFF) | (message[24 + iterator + ((5 * x) + 2)]));
                     room.room_id += (char)message[24 + iterator + x];
+                    room.creatorIPAddress += (char)message[24 + (iterator + 50) + x];
                 }
                 room.room_id.Normalize();
-                iterator += 50;
-                Debug.WriteLine("roomID[{0}]: " + room.room_id, i);
+                room.creatorIPAddress.Normalize();
+                iterator += 100;
+                Debug.WriteLine("roomID[{0}]: " + room.room_id + "\ncreatorIPAddress[{1}]: " + room.creatorIPAddress, i, i);
 
                 rooms.Add(room);
             }
 
             return rooms;
+        }
+
+        public static Room getRoom(byte[] message)
+        {
+            int iterator = 0;
+            byte[] result = new byte[4];
+            Array.Copy(message, 20 + iterator, result, 0, 4);
+            int peer_id = BitConverter.ToInt32(result, 0);
+            Debug.WriteLine("peer_id: " + peer_id);
+            iterator += 4;
+
+            result = new byte[4];
+            Array.Copy(message, 20 + iterator, result, 0, 4);
+            int maxplayer = BitConverter.ToInt32(result, 0);
+            Debug.WriteLine("maxplayer: " + maxplayer);
+            iterator += 4;
+
+            result = new byte[4];
+            Array.Copy(message, 20 + iterator, result, 0, 4);
+            int neighbor_count = BitConverter.ToInt32(result, 0);
+            iterator += 4;
+            Debug.WriteLine("neighbor_count: " + neighbor_count);
+
+            Room room = new Room();
+            room.peer_id = peer_id;
+            room.maxplayer = maxplayer;
+            for (int j = 0; j < neighbor_count; j++)
+            {
+                result = new byte[4];
+                Array.Copy(message, 20 + iterator, result, 0, 4);
+                int peerID = BitConverter.ToInt32(result, 0);
+
+                Debug.WriteLine("peerID[{0}]: " + peerID, j);
+
+                Peer p = new Peer();
+                p.peer_id = peerID;
+                iterator += 4;
+                room.neighbor.Add(p);
+            }
+
+            room.room_id = "";
+            for (int x = 0; x < 50; ++x)
+            {
+                //Console.WriteLine("message ke-{0}: " + (char)message[24 + iterator + x], x);
+                //room_id = (byte)((message[24 + iterator + (5 * x)] << 4 & 0xFF) | (message[24 + iterator + ((5 * x) + 2)]));
+                room.room_id += (char)message[20 + iterator + x];
+                room.creatorIPAddress += (char)message[20 + (iterator + 50) + x];
+            }
+            room.room_id = normalizeString(room.room_id);
+            room.creatorIPAddress = normalizeString(room.creatorIPAddress);
+            Debug.WriteLine("roomID: " + room.room_id + "\ncreatorIPAddress: " + room.creatorIPAddress);
+            
+            return room;
         }
 
         public static byte[] dataToByte(string data, int allocation)
@@ -159,6 +215,21 @@ namespace MessageFormat
                     result[i] = (byte)data[i];
                 }
             }
+            return result;
+        }
+
+        public static string normalizeString(string data)
+        {
+            string result = "";
+            int i = 0;
+            while (i < data.Length)
+            {
+                if (data[i] != 0)
+                {
+                    result += data[i];
+                }
+            }
+
             return result;
         }
 
@@ -277,6 +348,36 @@ namespace MessageFormat
             buffer.AddRange(BitConverter.GetBytes(peer_id));
             return buffer.ToArray();
         }
+
+        public static byte[] RefreshInsideRoom(int peer_id)
+        {
+            List<byte> buffer = new List<byte>();
+            buffer.AddRange(dataToByte(PSTR, PSTR_SIZE));
+            buffer.AddRange(RESERVED);
+            buffer.Add(INSIDEROOM_CODE);
+            buffer.AddRange(BitConverter.GetBytes(peer_id));
+            return buffer.ToArray();
+        }
+
+        public static byte[] InsideRoom(Room room)
+        {
+            List<byte> buffer = new List<byte>();
+            buffer.AddRange(dataToByte(PSTR, PSTR_SIZE));
+            buffer.AddRange(RESERVED);
+            buffer.Add(INSIDEROOM_CODE);
+            buffer.AddRange(room.roomToBytes());
+            return buffer.ToArray();
+        }
+
+        public static byte[] Dummy()
+        {
+            List<byte> buffer = new List<byte>();
+            buffer.AddRange(dataToByte(PSTR, PSTR_SIZE));
+            buffer.AddRange(RESERVED);
+            buffer.Add(DUMMY_CODE);
+            return buffer.ToArray();
+        }
     }
+
 
 }

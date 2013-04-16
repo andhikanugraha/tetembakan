@@ -35,7 +35,10 @@ namespace Client
 
         public void OnPropertyChange(object sender, PropertyChangedEventArgs e)
         {
-            RoomTitle.Text = "Room #" + ViewModel.Room.room_id.ToString();
+            ParticipantsListView.DataContext = ViewModel;
+            ParticipantsListView.ItemsSource = ViewModel.Room.neighbor;
+
+            RoomTitle.Text = "Room #" + ViewModel.Room.room_id;
         }
 
         private void LeaveRoomButton_Click(object sender, RoutedEventArgs e)
@@ -43,7 +46,6 @@ namespace Client
             if (LeaveRoom != null)
             {
                 LeaveRoom(this, e);
-
                 //Console.WriteLine("Masuk join");
                 //Console.WriteLine("peerID: "+ Utility.getPeerID());
                 //Console.WriteLine("current room: " + GetSelectedRoom().room_id);
@@ -54,11 +56,51 @@ namespace Client
                 if (Message.getCode(message) == Message.SUCCESS_CODE)
                 {
                     MessageBox.Show("Success to leave the room.");
+
                 }
 
                 message = Utility.getConnection().receive();
                 Console.WriteLine("message code: " + Message.getCode(message));
             }
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("Loaded.");
+            /*
+            Utility.getConnection().sendMessage(Message.RefreshInsideRoom(Utility.getPeerID()));
+            byte[] message = Utility.getConnection().receive();
+            Console.WriteLine("message code: " + Message.getCode(message));
+            if (Message.getCode(message) == Message.INSIDEROOM_CODE)
+            {
+                Room room = Message.getRoom(message);
+                MessageBox.Show("Success refreshing room " + room.room_id);
+                ViewModel.Room = room;
+            }
+            else 
+            {
+                MessageBox.Show("message code: " + Message.getCode(message));
+            }
+
+            message = Utility.getConnection().receive();
+            Console.WriteLine("message code: " + Message.getCode(message));
+            */
+        }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            Utility.getConnection().sendMessage(Message.RefreshInsideRoom(Utility.getPeerID()));
+            byte[] message = Utility.getConnection().receive();
+            Console.WriteLine("message code: " + Message.getCode(message));
+            if (Message.getCode(message) == Message.INSIDEROOM_CODE)
+            {
+                Room room = Message.getRoom(message);
+                MessageBox.Show("Success refreshing room " + room.neighbor.Count);
+                ViewModel.Room = room;
+            }
+
+            message = Utility.getConnection().receive();
+            Console.WriteLine("message code: " + Message.getCode(message));
         }
     }
 }

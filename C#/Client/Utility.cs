@@ -9,6 +9,7 @@ namespace Client
     {
         private static Connection connection;
         private static int peerID;
+        private static string roomID;
 
         public static Connection getConnection()
         {
@@ -25,6 +26,11 @@ namespace Client
             return peerID;
         }
 
+        public static string getRoomID()
+        {
+            return roomID;
+        }
+
         public static void setConnection(string IPAddress)
         {
             connection = new Connection(IPAddress);
@@ -33,6 +39,11 @@ namespace Client
         public static void setPeerID(int new_peerID)
         {
             peerID = new_peerID;
+        }
+
+        public static void setRoomID(string new_roomID)
+        {
+            roomID = new_roomID;
         }
     }
 }

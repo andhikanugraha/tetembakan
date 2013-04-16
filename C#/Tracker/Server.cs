@@ -25,7 +25,7 @@ namespace MainTracker
         public bool log = true;
         private int findPeer(int peer_id)
         {
-            for (int i = 0; i < peers.Count; i++)
+            for (int i = 0; i < peers.Count; ++i)
             {
                 Peer p = peers[i] as Peer;
                 if (p.peer_id == peer_id)
@@ -37,7 +37,7 @@ namespace MainTracker
 
         private int findRoom(String room_id)
         {
-            for (int i = 0; i < rooms.Count; i++)
+            for (int i = 0; i < rooms.Count; ++i)
             {
                 Room r = rooms[i] as Room;
                 if (r.room_id == room_id)
@@ -84,12 +84,18 @@ namespace MainTracker
             else
             {
                 Room r = rooms[rindex] as Room;
-                Peer p = peers[pindex] as Peer;
+                Peer p = new Peer();//peers[pindex] as Peer;
+                p.peer_id = peer_id;
                 if (r.neighbor.Count == r.maxplayer)
                     return false;
                 if (r.findNeighbor(peer_id) != -1)
                     return false;
                 r.neighbor.Add(p);
+
+                foreach (Peer x in r.neighbor)
+                {
+                    Debug.WriteLine("peer id yang ada: " + x.peer_id);
+                }
                 return true;
             }
         }
@@ -123,6 +129,9 @@ namespace MainTracker
         {
             TcpClient tcpClient = (TcpClient)client;
             NetworkStream clientStream = tcpClient.GetStream();
+            string clientIPAddress = "" + IPAddress.Parse((((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address.ToString()));
+            
+            Debug.WriteLine(clientIPAddress);
             tcpClient.ReceiveTimeout = 10000000;
 
             byte[] message = new byte[4096];
@@ -181,18 +190,19 @@ namespace MainTracker
                         int peerid = Message.getPeerId(message);
                         int maxplayer = Message.getMaxPlayer(message);
                         String roomid = Message.getRoomId2(message);
-                        if (findPeer(peerid) != -1 && findRoom(roomid) == -1 && rooms.Count < max_room)
+                        if (/*findPeer(peerid) != -1  && */findRoom(roomid) == -1 && rooms.Count < max_room)
                         {
                             Room room = new Room();
                             room.peer_id = peerid;
                             room.room_id = roomid;
                             room.maxplayer = maxplayer;
-                            room.neighbor = new ArrayList();
+                            room.neighbor = new List<Peer>();
                             Peer p2 = peers[findPeer(peerid)] as Peer;
                             room.neighbor.Add(p2);
+                            room.creatorIPAddress = clientIPAddress;
                             rooms.Add(room);
                             if (log)
-                                Console.WriteLine("Room creation success : peer " + peerid + " room " + roomid);
+                                Console.WriteLine("Room creation success : peer " + peerid + " room " + roomid + " IPAddress: " + clientIPAddress);
                             byte[] buff = Message.Success();
                             clientStream.Write(buff, 0, buff.Length);
                             clientStream.Flush();
@@ -222,6 +232,7 @@ namespace MainTracker
                             if (log)
                                 Console.WriteLine("Room join success : peer " + peerid3 + " room " + roomid3);
                             byte[] buff = Message.Success();
+                            
                             clientStream.Write(buff, 0, buff.Length);
                             clientStream.Flush();
                         }
@@ -299,6 +310,28 @@ namespace MainTracker
                                 clientStream.Write(buff, 0, buff.Length);
                                 clientStream.Flush();
                             }
+                        }
+                        break;
+                    case Message.INSIDEROOM_CODE:// 253
+                        int peerid6 = Message.getPeerId(message);
+                        int roomidx6 = findRoom(peerid6);
+                        if (roomidx6 != -1)
+                        {
+                            Room room = rooms[roomidx6] as Room;
+                            if (log)
+                                Console.WriteLine("Room finding success : peer " + peerid6 + " room " + room.room_id);
+                            byte[] buff = Message.InsideRoom(room);
+
+                            clientStream.Write(buff, 0, buff.Length);
+                            clientStream.Flush();
+                        }
+                        else
+                        {
+                            if (log)
+                                Console.WriteLine("Room join failed : peer " + peerid6 + " room " + roomidx6);
+                            byte[] buff = Message.Failed();
+                            clientStream.Write(buff, 0, buff.Length);
+                            clientStream.Flush();
                         }
                         break;
                 }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="640">
-    <Grid>
+    <Grid Loaded="Grid_Loaded">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
@@ -14,16 +14,17 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="RoomTitle" TextWrapping="Wrap" Text="Room" VerticalAlignment="Top" TextAlignment="Left" FontSize="36" FontFamily="Segoe UI Light" Height="66" Margin="30,30,30,0" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="RoomTitle" TextWrapping="Wrap" Text="Room" VerticalAlignment="Top" TextAlignment="Left" FontSize="36" FontFamily="Segoe UI Light" Height="66" Margin="30,30,30,0" Grid.ColumnSpan="2" />
         <Button x:Name="StartGameButton" Content="Start Game" HorizontalAlignment="Left" Margin="30,10,15,30" Grid.Row="2
                 " VerticalAlignment="Top" Width="140" Height="30" IsDefault="True" IsEnabled="False"/>
         <Button x:Name="LeaveRoomButton" Content="Leave Room" HorizontalAlignment="Right" Margin="15,10,30,0" Grid.Row="2" VerticalAlignment="Top" Width="120" Height="30" IsCancel="True" Click="LeaveRoomButton_Click"/>
         <ListView x:Name="ParticipantsListView" Margin="30,0" Grid.Row="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="Peer ID" Width="100" DisplayMemberBinding="{Binding Path=peer_id}"/>
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button Content="Refresh" Height="30" HorizontalAlignment="Left" IsCancel="True" Margin="275,10,0,0" Name="RefreshButton" VerticalAlignment="Top" Width="120" Grid.Row="2" Click="RefreshButton_Click" />
     </Grid>
 </UserControl>

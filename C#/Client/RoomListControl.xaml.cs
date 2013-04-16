@@ -75,7 +75,7 @@ namespace Client
 
                 if (Message.getCode(message) == Message.SUCCESS_CODE)
                 {
-
+                    MessageBox.Show("Success to join room " + GetSelectedRoom().room_id + ".");
                 }
 
                 message = Utility.getConnection().receive();
@@ -119,9 +119,6 @@ namespace Client
 
                         ViewModel.Rooms.Add(room);
                     }
-
-                    RoomListView.DataContext = ViewModel;
-                    RoomListView.ItemsSource = ViewModel.Rooms;
                 }
             }
 

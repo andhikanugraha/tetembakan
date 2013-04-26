@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{07E0DA0D-14C6-4621-B3B3-A724F977EA25}</ProjectGuid>
+    <ProjectTypeGuids>{9B831FEF-F496-498F-9FE8-180DA5CB4258};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>GunBond</RootNamespace>
+    <MonoGamePlatform>WindowsGL</MonoGamePlatform>
+    <AssemblyName>GunBond</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="MonoGame.Framework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Game1.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ConvertUnits.cs" />
+    <Compile Include="PhysicsObject.cs" />
+    <Compile Include="StaticPhysicsObject.cs" />
+    <Compile Include="Character.cs" />
+    <Compile Include="CompositeCharacter.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\DebugView.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Settings.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\BroadPhase.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\Collision.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\Distance.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\DynamicTree.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\TimeOfImpact.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\Shapes\CircleShape.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\Shapes\EdgeShape.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\Shapes\LoopShape.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\Shapes\PolygonShape.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Collision\Shapes\Shape.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\FixedArray.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\HashSet.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\LineTools.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Math.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Path.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\PathManager.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\PolygonTools.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\TextureConverter.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Vertices.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\ConvexHull\GiftWrap.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\ConvexHull\Melkman.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\BayazitDecomposer.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDTDecomposer.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\EarclipDecomposer.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\FlipcodeDecomposer.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\SeidelDecomposer.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\ITriangulatable.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Orientation.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\TriangulationConstraint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\TriangulationContext.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\TriangulationMode.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\TriangulationPoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\TriangulationUtil.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Delaunay\DelaunayTriangle.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Delaunay\Sweep\AdvancingFront.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Delaunay\Sweep\AdvancingFrontNode.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Delaunay\Sweep\DTSweep.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepConstraint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepContext.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepPointComparator.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Delaunay\Sweep\PointOnEdgeException.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Polygon\Polygon.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Polygon\PolygonPoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Polygon\PolygonSet.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Sets\ConstrainedPointSet.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Sets\PointSet.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Util\FixedArray3.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Util\FixedBitArray3.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Util\PointGenerator.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\Decomposition\CDT\Util\PolygonGenerator.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\PhysicsLogic\Explosion.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\PhysicsLogic\PhysicsLogic.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\PolygonManipulation\CuttingTools.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\PolygonManipulation\SimplifyTools.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Common\PolygonManipulation\YuPengClipper.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Controllers\AbstractForceController.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Controllers\Controller.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Controllers\GravityController.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Controllers\SimpleWindForce.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Controllers\VelocityLimitController.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Body.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\BreakableBody.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\ContactManager.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Fixture.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Island.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\TimeStep.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\World.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\WorldCallbacks.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Contacts\Contact.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Contacts\ContactSolver.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\AngleJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\DistanceJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\FixedAngleJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\FixedDistanceJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\FixedFrictionJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\FixedLineJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\FixedMouseJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\FixedPrismaticJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\FixedRevoluteJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\FrictionJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\GearJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\Joint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\LineJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\PrismaticJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\PulleyJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\RevoluteJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\RopeJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\SliderJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Dynamics\Joints\WeldJoint.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Factories\BodyFactory.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Factories\FixtureFactory.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Factories\JointFactory.cs" />
+    <Compile Include="Farseer Physics Engine 3.2 Class\Factories\LinkFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\" />
+    <Folder Include="Farseer Physics Engine 3.2 Class\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Content Include="Content\background.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\square.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

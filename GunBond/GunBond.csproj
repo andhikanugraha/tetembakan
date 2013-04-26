@@ -142,6 +142,7 @@
     <Compile Include="Farseer Physics Engine 3.2 Class\Factories\FixtureFactory.cs" />
     <Compile Include="Farseer Physics Engine 3.2 Class\Factories\JointFactory.cs" />
     <Compile Include="Farseer Physics Engine 3.2 Class\Factories\LinkFactory.cs" />
+    <Compile Include="Projectile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

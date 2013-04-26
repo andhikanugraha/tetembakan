@@ -31,6 +31,7 @@ namespace GunBond
 		Texture2D squareTexture;
 		StaticPhysicsObject ground;
 		CompositeCharacter box;
+		CompositeCharacter box2;
 
 		public Game1 ()
 		{
@@ -74,6 +75,7 @@ namespace GunBond
 			ground = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 500), GraphicsDevice.Viewport.Width, 64, squareTexture);
 			box = new CompositeCharacter(world, new Vector2(100, 0), 32, 64, 5, squareTexture);
 			box.forcePower = 50;
+			box2 = new CompositeCharacter(world, new Vector2(500, 0), 32, 64, 5, squareTexture);
 		}
 
 		/// <summary>
@@ -91,7 +93,7 @@ namespace GunBond
 			box.Update(gameTime);
 			world.Step((float)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.001));
 
-			base.Update (gameTime);
+			base.Update(gameTime);
 		}
 
 		/// <summary>
@@ -105,6 +107,7 @@ namespace GunBond
 			//TODO: Add your drawing code here
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			box.Draw(spriteBatch);
+			box2.Draw(spriteBatch);
 			ground.Draw(spriteBatch);
 			spriteBatch.End();
 

@@ -10,7 +10,7 @@ using FarseerPhysics.Collision;
 
 namespace GunBond
 {
-	public class PhysicsObject
+	public class PhysicsObject : IDisposable
 	{
 		protected float width;
 		protected float height;
@@ -19,6 +19,29 @@ namespace GunBond
 		protected Texture2D texture;
 		protected Vector2 origin;
 
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+		
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				fixture.Dispose();
+				fixture = null;
+				body = null;
+				texture.Dispose();
+				texture = null;
+			}
+		}
+		
+		~PhysicsObject()
+		{
+			Dispose(false);
+		}
+		
 		public PhysicsObject (World world, Vector2 position, float width, float height, float mass, Texture2D texture)
 		{
 			this.texture = texture;

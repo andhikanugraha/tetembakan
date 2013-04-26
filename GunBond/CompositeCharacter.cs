@@ -18,6 +18,8 @@ namespace GunBond
 
 	public class CompositeCharacter : Character
 	{
+		private World world;
+
 		public Fixture wheel;
 		public Fixture cannon;
 		public FixedAngleJoint fixedAngleJoint;
@@ -33,11 +35,14 @@ namespace GunBond
 		
 		private const float nextJumpDelayTime = 1f;
 		private const float runSpeed = 8;
+		private const float rotateSpeed = 2;
 		private const float jumpImpulse = -50;
 		
 		public CompositeCharacter(World world, Vector2 position, float width, float height, float mass, Texture2D texture)
 			: base(world, position, width, height, mass, texture)
 		{
+			this.world = world;
+
 			if (width > height)
 			{
 				throw new Exception("Error width > height: can't make character because wheel would stick out of body");
@@ -90,8 +95,8 @@ namespace GunBond
 
 			turret = JointFactory.CreateRevoluteJoint(world, body, cannon.Body, Vector2.Zero);
 			turret.MotorEnabled = true;
-			motor.MaxMotorTorque = 1000f;
-			motor.MotorSpeed = 0;
+			turret.MaxMotorTorque = 1000f;
+			turret.MotorSpeed = 0;
 			
 			//Make sure the two fixtures don't collide with each other
 			wheel.CollisionFilter.IgnoreCollisionWith(fixture);
@@ -136,6 +141,7 @@ namespace GunBond
 			if (activity != Activity.Jumping && activity != Activity.Running)
 			{
 				HandleIdle(keyState, oldState, gameTime);
+				HandleShooting(keyState, oldState, gameTime);
 			}
 			
 			oldState = keyState;
@@ -183,12 +189,26 @@ namespace GunBond
 		{
 			if (keyState.IsKeyDown(Keys.D))
 			{
-				motor.MotorSpeed = runSpeed;
+				if (ConvertUnits.ToDisplayUnits(body.Position.X) > 800 - (width / 2))
+				{
+					motor.MotorSpeed = 0;
+				}
+				else
+				{
+					motor.MotorSpeed = runSpeed;
+				}
 				activity = Activity.Running;
 			}
 			else if (keyState.IsKeyDown(Keys.A))
 			{
-				motor.MotorSpeed = -runSpeed;
+				if (ConvertUnits.ToDisplayUnits(body.Position.X) < width / 2)
+				{
+					motor.MotorSpeed = 0;
+				}
+				else
+				{
+					motor.MotorSpeed = -runSpeed;
+				}
 				activity = Activity.Running;
 			}
 
@@ -203,11 +223,30 @@ namespace GunBond
 		{
 			if (keyState.IsKeyDown(Keys.W))
 			{
-				cannon.Body.Rotation += 0.01f;
+				// cannon.Body.Rotation += 0.01f;
+				turret.MotorSpeed = rotateSpeed;
 			}
 			else if (keyState.IsKeyDown(Keys.S))
 			{
-				cannon.Body.Rotation -= 0.01f;
+				// cannon.Body.Rotation -= 0.01f;
+				turret.MotorSpeed = -rotateSpeed;
+			}
+
+			if (keyState.IsKeyUp(Keys.W) && keyState.IsKeyUp(Keys.S))
+			{
+				turret.MotorSpeed = 0;
+			}
+
+		}
+
+		private void HandleShooting(KeyboardState keyState, KeyboardState oldState, GameTime gameTime)
+		{
+			if (keyState.IsKeyUp(Keys.Enter) && oldState.IsKeyDown(Keys.Enter))
+			{
+				if (p == null)
+				{
+					p = new Projectile(world, new Vector2(ConvertUnits.ToDisplayUnits(cannon.Body.Position.X) + (float)Math.Cos(cannon.Body.Rotation - (float)Math.PI / 2) * 50, ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y) + (float)Math.Sin(cannon.Body.Rotation - (float)Math.PI / 2) * 50), 16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, texture);
+				}
 			}
 		}
 		
@@ -224,13 +263,16 @@ namespace GunBond
 			//These first two draw calls draw the upper and lower body independently
 			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(body.Position.X), (int)ConvertUnits.ToDisplayUnits(body.Position.Y), (int)width, (int)(height - (width / 2))), null, Color.White, body.Rotation, origin, SpriteEffects.None, 0f);
 			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.Y), (int)width, (int)width), null, Color.White, wheel.Body.Rotation, origin, SpriteEffects.None, 0f);
-			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), 
-			                                        (int)width / 2, (int)height / 2), null, Color.White, cannon.Body.Rotation, new Vector2(origin.X, origin.Y + ConvertUnits.ToDisplayUnits(height / 4)), SpriteEffects.None, 0f);
-			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), 
-			                                        (int)width, (int)height / 2), null, Color.White, 0f, origin, SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), null, Color.White, cannon.Body.Rotation, new Vector2(origin.X, origin.Y + ConvertUnits.ToDisplayUnits(height / 4)), SpriteEffects.None, 0f);
+			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width, (int)height / 2), null, Color.White, 0f, origin, SpriteEffects.None, 0f);
 
 			//This last draw call shows how to draw these two bodies with one texture (drawn semi-transparent here so you can see the inner workings)            
 			spriteBatch.Draw(texture, new Rectangle((int)Position.X, (int)(Position.Y), (int)width, (int)height), null, new Color(1, 1, 1, 0.5f), body.Rotation, origin, SpriteEffects.None, 0f);
+
+			if (p != null)
+			{
+				p.Draw(spriteBatch);
+			}
 		}
 		
 		public override Vector2 Position

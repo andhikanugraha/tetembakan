@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Factories;
 using FarseerPhysics.Collision;
 
@@ -16,6 +18,7 @@ namespace GunBond
 		public float forcePower;
 		protected KeyboardState keyState;
 		protected KeyboardState oldState;
+		protected Projectile p;
 
 		public Character (World world, Vector2 position, float width, float height, float mass, Texture2D texture) : base(world, position, width, height, mass, texture)
 		{
@@ -24,6 +27,14 @@ namespace GunBond
 		public virtual void Update(GameTime gameTime)
 		{
 			HandleInput(gameTime);
+			if (p != null)
+			{
+				if (p.destroySig == 1 || ConvertUnits.ToDisplayUnits(p.body.Position.X) < 0 || ConvertUnits.ToDisplayUnits(p.body.Position.Y) < 0)
+				{
+					p.Dispose();
+					p = null;
+				}
+			}
 		}
 
 		protected virtual void HandleInput(GameTime gameTime)

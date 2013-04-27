@@ -19,22 +19,28 @@ namespace GunBond
 		protected KeyboardState keyState;
 		protected KeyboardState oldState;
 		protected Projectile p;
+		protected int turn;
+		protected float health = 100;
+		protected float shootPower;
 
-		public Character (World world, Vector2 position, float width, float height, float mass, Texture2D texture) : base(world, position, width, height, mass, texture)
+		public Character (World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture) : base(world, position, width, height, mass, texture)
 		{
+			this.turn = turn;
 		}
 
-		public virtual void Update(GameTime gameTime)
+		public virtual int Update(GameTime gameTime)
 		{
 			HandleInput(gameTime);
 			if (p != null)
 			{
-				if (p.destroySig == 1 || ConvertUnits.ToDisplayUnits(p.body.Position.X) < 0 || ConvertUnits.ToDisplayUnits(p.body.Position.Y) < 0)
+				if (p.destroySig == 1 || ConvertUnits.ToDisplayUnits(p.body.Position.X) < 0 || ConvertUnits.ToDisplayUnits(p.body.Position.X) > 800)
 				{
 					p.Dispose();
 					p = null;
+					return (turn + 1) % 2;
 				}
 			}
+			return turn;
 		}
 
 		protected virtual void HandleInput(GameTime gameTime)

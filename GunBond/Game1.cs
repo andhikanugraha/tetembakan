@@ -30,8 +30,10 @@ namespace GunBond
 		Texture2D groundTexture;
 		Texture2D squareTexture;
 		StaticPhysicsObject ground;
-		CompositeCharacter box;
-		CompositeCharacter box2;
+		Player box;
+		Player box2;
+
+		int turn = 0;
 
 		public Game1 ()
 		{
@@ -73,9 +75,10 @@ namespace GunBond
 			groundTexture = Content.Load<Texture2D>("background");
 			squareTexture = Content.Load<Texture2D>("square");
 			ground = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 500), GraphicsDevice.Viewport.Width, 64, squareTexture);
-			box = new CompositeCharacter(world, new Vector2(100, 0), 32, 64, 5, squareTexture);
+			box = new Player(world, new Vector2(100, 0), 32, 64, 5, 0, squareTexture);
 			box.forcePower = 50;
-			box2 = new CompositeCharacter(world, new Vector2(500, 0), 32, 64, 5, squareTexture);
+			box2 = new Player(world, new Vector2(500, 0), 32, 64, 5, 1, squareTexture);
+			box2.forcePower = 50;
 		}
 
 		/// <summary>
@@ -89,8 +92,15 @@ namespace GunBond
 			if (GamePad.GetState (PlayerIndex.One).Buttons.Back == ButtonState.Pressed) {
 				Exit ();
 			}
-			// TODO: Add your update logic here			
-			box.Update(gameTime);
+			// TODO: Add your update logic here		
+			if (turn == 0)
+			{
+				turn = box.Update(gameTime);
+			}
+			else
+			{
+				turn = box2.Update(gameTime);
+			}
 			world.Step((float)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.001));
 
 			base.Update(gameTime);

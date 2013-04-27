@@ -16,9 +16,9 @@ namespace GunBond
 	{
 		public int destroySig = 0;
 
-		public Projectile (World world, Vector2 position, float width, float height, float mass, float angle, Texture2D texture) : base(world, position, width, height, mass, texture)
+		public Projectile (World world, Vector2 position, float width, float height, float mass, float angle, float shootPower, Texture2D texture) : base(world, position, width, height, mass, texture)
 		{
-			body.LinearVelocity = new Vector2((float)Math.Cos(angle) * 10f, (float)Math.Sin(angle) * 10f);
+			body.LinearVelocity = new Vector2((float)Math.Cos(angle) * shootPower, (float)Math.Sin(angle) * shootPower);
 
 			fixture.OnCollision += new OnCollisionEventHandler(OnCollision);
 		}

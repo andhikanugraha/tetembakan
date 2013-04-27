@@ -46,7 +46,6 @@
     <Compile Include="PhysicsObject.cs" />
     <Compile Include="StaticPhysicsObject.cs" />
     <Compile Include="Character.cs" />
-    <Compile Include="CompositeCharacter.cs" />
     <Compile Include="Farseer Physics Engine 3.2 Class\DebugView.cs" />
     <Compile Include="Farseer Physics Engine 3.2 Class\Settings.cs" />
     <Compile Include="Farseer Physics Engine 3.2 Class\Collision\BroadPhase.cs" />
@@ -143,6 +142,7 @@
     <Compile Include="Farseer Physics Engine 3.2 Class\Factories\JointFactory.cs" />
     <Compile Include="Farseer Physics Engine 3.2 Class\Factories\LinkFactory.cs" />
     <Compile Include="Projectile.cs" />
+    <Compile Include="Player.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

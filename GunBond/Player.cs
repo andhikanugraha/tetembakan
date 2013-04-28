@@ -36,7 +36,7 @@ namespace GunBond
 		private const float nextJumpDelayTime = 1f;
 		private const float runSpeed = 8;
 		private const float rotateSpeed = 2;
-		private const float jumpImpulse = -50;
+		private const float jumpImpulse = -200;
 		
 		public Player(World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture)
 			: base(world, position, width, height, mass, turn, texture)
@@ -164,7 +164,7 @@ namespace GunBond
 				jumpDelayTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
 			
-			if (state.IsKeyDown(Keys.Space) && activity != Activity.Jumping)
+			if (state.IsKeyDown(Keys.Space) && activity != Activity.Jumping && activity != Activity.Shooting)
 			{
 				if (jumpDelayTime >= 0)
 				{
@@ -233,11 +233,25 @@ namespace GunBond
 		{
 			if (keyState.IsKeyDown(Keys.W) && p == null && activity != Activity.Shooting)
 			{
-				turret.MotorSpeed = rotateSpeed;
+				if (cannon.Body.Rotation < Math.PI / 2)
+				{
+					turret.MotorSpeed = rotateSpeed;
+				}
+				else
+				{
+					turret.MotorSpeed = 0;
+				}
 			}
 			else if (keyState.IsKeyDown(Keys.S) && p == null && activity != Activity.Shooting)
 			{
-				turret.MotorSpeed = -rotateSpeed;
+				if (cannon.Body.Rotation > -Math.PI / 2)
+				{
+					turret.MotorSpeed = -rotateSpeed;
+				}
+				else
+				{
+					turret.MotorSpeed = 0;
+				}
 			}
 
 			if (keyState.IsKeyUp(Keys.W) && keyState.IsKeyUp(Keys.S))
@@ -249,29 +263,42 @@ namespace GunBond
 
 		private void HandleShooting(KeyboardState keyState, KeyboardState oldState, GameTime gameTime)
 		{
-			if (keyState.IsKeyDown(Keys.Enter) && oldState.IsKeyUp(Keys.Enter))
+			if (keyState.IsKeyDown(Keys.Enter) && oldState.IsKeyUp(Keys.Enter) && p == null)
 			{
 				shootPower = 0f;
+				increasePower = true;
 				activity = Activity.Shooting;
 			}
-			if (keyState.IsKeyDown(Keys.Enter) && oldState.IsKeyDown(Keys.Enter))
+			if (keyState.IsKeyDown(Keys.Enter) && oldState.IsKeyDown(Keys.Enter) && p == null)
 			{
-				if (shootPower < 20f)
+				if (increasePower == true)
 				{
-					shootPower += 0.2f;
+					if (shootPower < 40f)
+					{
+						shootPower += 0.2f;
+					}
+					if (shootPower >= 40f)
+					{
+						increasePower = false;
+					}
 				}
-				if (shootPower >= 20f)
+				else if (increasePower == false)
 				{
-					shootPower = 0f;
+					if (shootPower > 0f)
+					{
+						shootPower -= 0.2f;
+					}
+					if (shootPower <= 0f)
+					{
+						increasePower = true;
+					}
 				}
 			}
-			if (keyState.IsKeyUp(Keys.Enter) && oldState.IsKeyDown(Keys.Enter))
+			if (keyState.IsKeyUp(Keys.Enter) && oldState.IsKeyDown(Keys.Enter) && p == null)
 			{
-				if (p == null)
-				{
-					p = new Projectile(world, new Vector2(ConvertUnits.ToDisplayUnits(cannon.Body.Position.X) + (float)Math.Cos(cannon.Body.Rotation - (float)Math.PI / 2) * 50, ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y) + (float)Math.Sin(cannon.Body.Rotation - (float)Math.PI / 2) * 50), 16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, shootPower, texture);
-				}
+				p = new Projectile(world, new Vector2(ConvertUnits.ToDisplayUnits(cannon.Body.Position.X) + (float)Math.Cos(cannon.Body.Rotation - (float)Math.PI / 2) * 50, ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y) + (float)Math.Sin(cannon.Body.Rotation - (float)Math.PI / 2) * 50), 16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, shootPower, wind, texture);
 				activity = Activity.Idle;
+				shootPower = 0f;
 			}
 		}
 		

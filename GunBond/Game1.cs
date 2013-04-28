@@ -24,12 +24,13 @@ namespace GunBond
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
+		SpriteFont spriteFont;
 
 		World world;
 
-		Texture2D groundTexture;
 		Texture2D squareTexture;
 		StaticPhysicsObject ground;
+		StaticPhysicsObject wall;
 		Player box;
 		Player box2;
 
@@ -43,7 +44,7 @@ namespace GunBond
 			graphics.IsFullScreen = false;		
 			graphics.PreferredBackBufferWidth = 800;
 			graphics.PreferredBackBufferHeight = 600;
-			world =  new World(new Vector2(0f, 9.82f));
+			world =  new World(new Vector2(0, 9.82f));
 			ConvertUnits.SetDisplayUnitToSimUnitRatio(30);
 		}
 
@@ -71,14 +72,17 @@ namespace GunBond
 
 			//TODO: use this.Content to load your game content here 
 
-			// terrain
-			groundTexture = Content.Load<Texture2D>("background");
+			// textures
 			squareTexture = Content.Load<Texture2D>("square");
 			ground = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 500), GraphicsDevice.Viewport.Width, 64, squareTexture);
-			box = new Player(world, new Vector2(100, 0), 32, 64, 5, 0, squareTexture);
+			wall = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 400), 32, 150, squareTexture);
+			box = new Player(world, new Vector2(100, 0), 32, 64, 20, 0, squareTexture);
 			box.forcePower = 50;
-			box2 = new Player(world, new Vector2(500, 0), 32, 64, 5, 1, squareTexture);
+			box2 = new Player(world, new Vector2(700, 0), 32, 64, 20, 1, squareTexture);
 			box2.forcePower = 50;
+
+			// font
+			spriteFont = Content.Load<SpriteFont>("font");
 		}
 
 		/// <summary>
@@ -92,7 +96,7 @@ namespace GunBond
 			if (GamePad.GetState (PlayerIndex.One).Buttons.Back == ButtonState.Pressed) {
 				Exit ();
 			}
-			// TODO: Add your update logic here		
+			// TODO: Add your update logic here	
 			if (turn == 0)
 			{
 				turn = box.Update(gameTime);
@@ -119,6 +123,17 @@ namespace GunBond
 			box.Draw(spriteBatch);
 			box2.Draw(spriteBatch);
 			ground.Draw(spriteBatch);
+			wall.Draw(spriteBatch);
+			if (turn == 0)
+			{
+				if (box.wind != 0) spriteBatch.DrawString(spriteFont, (box.wind >= 0 ? ">> " : "<< ") + Math.Abs(box.wind).ToString(), new Vector2(400, 0), Color.Black);
+				else spriteBatch.DrawString(spriteFont, 0.ToString(), new Vector2(400, 0), Color.Black);
+			}
+			else if (turn == 1)
+			{
+				if (box2.wind != 0) spriteBatch.DrawString(spriteFont, (box2.wind >= 0 ? ">> " : "<< ") + Math.Abs(box2.wind).ToString(), new Vector2(400, 0), Color.Black);
+				else spriteBatch.DrawString(spriteFont, 0.ToString(), new Vector2(400, 0), Color.Black);
+			}
 			spriteBatch.End();
 
 			base.Draw (gameTime);

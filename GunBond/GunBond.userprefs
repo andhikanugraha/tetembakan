@@ -1,11 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Character.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Game1.cs">
     <Files>
-      <File FileName="Game1.cs" Line="100" Column="8" />
-      <File FileName="Character.cs" Line="24" Column="30" />
-      <File FileName="CompositeCharacter.cs" Line="283" Column="1" />
-      <File FileName="Projectile.cs" Line="21" Column="54" />
+      <File FileName="Game1.cs" Line="30" Column="3" />
+      <File FileName="Character.cs" Line="41" Column="6" />
+      <File FileName="Player.cs" Line="262" Column="4" />
+      <File FileName="Projectile.cs" Line="21" Column="110" />
       <File FileName="PhysicsObject.cs" Line="30" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>

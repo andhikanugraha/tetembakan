@@ -1,13 +1,18 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Game1.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="PhysicsObject.cs">
     <Files>
-      <File FileName="Game1.cs" Line="30" Column="3" />
-      <File FileName="Character.cs" Line="41" Column="6" />
-      <File FileName="Player.cs" Line="262" Column="4" />
-      <File FileName="Projectile.cs" Line="21" Column="110" />
-      <File FileName="PhysicsObject.cs" Line="30" Column="18" />
+      <File FileName="Game1.cs" Line="91" Column="113" />
+      <File FileName="Character.cs" Line="44" Column="15" />
+      <File FileName="Player.cs" Line="324" Column="101" />
+      <File FileName="Projectile.cs" Line="22" Column="84" />
+      <File FileName="PhysicsObject.cs" Line="48" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

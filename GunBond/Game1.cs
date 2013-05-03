@@ -29,6 +29,7 @@ namespace GunBond
 		World world;
 
 		Texture2D squareTexture;
+		Texture2D projectileTexture;
 		StaticPhysicsObject ground;
 		StaticPhysicsObject wall;
 		Player box;
@@ -74,11 +75,20 @@ namespace GunBond
 
 			// textures
 			squareTexture = Content.Load<Texture2D>("square");
+			projectileTexture = Content.Load<Texture2D>("projectile");
 			ground = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 500), GraphicsDevice.Viewport.Width, 64, squareTexture);
-			wall = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 400), 32, 150, squareTexture);
-			box = new Player(world, new Vector2(100, 0), 32, 64, 20, 0, squareTexture);
+			wall = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 450), 32, 64, squareTexture);
+			Texture2D body1 = Content.Load<Texture2D>("body1");
+			Texture2D cannon1 = Content.Load<Texture2D>("Cannon1");
+			Texture2D turret1 = Content.Load<Texture2D>("turret1");
+			Texture2D wheel1 = Content.Load<Texture2D>("wheel1");
+			box = new Player(world, new Vector2(100, 0), 32, 64, 20, 0, squareTexture, body1, cannon1, turret1, wheel1, projectileTexture);
 			box.forcePower = 50;
-			box2 = new Player(world, new Vector2(700, 0), 32, 64, 20, 1, squareTexture);
+			Texture2D body2 = Content.Load<Texture2D>("body2");
+			Texture2D cannon2 = Content.Load<Texture2D>("Cannon2");
+			Texture2D turret2 = Content.Load<Texture2D>("turret2");
+			Texture2D wheel2 = Content.Load<Texture2D>("wheel2");
+			box2 = new Player(world, new Vector2(700, 0), 32, 64, 20, 1, squareTexture, body2, cannon2, turret2, wheel2, projectileTexture);
 			box2.forcePower = 50;
 
 			// font

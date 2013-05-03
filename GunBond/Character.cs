@@ -24,7 +24,6 @@ namespace GunBond
 		protected float shootPower;
 		protected bool increasePower;
 		public float wind;
-		private int direction;
 		private Random r = new Random();
 
 		public Character (World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture) : base(world, position, width, height, mass, texture)
@@ -52,12 +51,7 @@ namespace GunBond
 
 		private void nextWind()
 		{
-			do
-			{
-				direction = r.Next(-1, 2);
-			}
-			while (direction == 0);
-			this.wind = (float)(direction * (r.Next (-2, 3)));
+			this.wind = (float)(r.Next (-2, 3));
 		}
 
 		protected virtual void HandleInput(GameTime gameTime)

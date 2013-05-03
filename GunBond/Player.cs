@@ -38,10 +38,33 @@ namespace GunBond
 		private const float rotateSpeed = 2;
 		private const float jumpImpulse = -200;
 		
-		public Player(World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture)
+		private Texture2D bodyTexture;
+		private Texture2D cannonTexture;
+		private Texture2D turretTexture;
+		private Texture2D wheelTexture;
+		private Vector2 bodyOrigin;
+		private Vector2 cannonOrigin;
+		private Vector2 turretOrigin;
+		private Vector2 wheelOrigin;
+
+		private Texture2D projectileTexture;
+		
+		public Player(World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture, Texture2D bodyTexture, Texture2D cannonTexture, Texture2D turretTexture, Texture2D wheelTexture, Texture2D projectileTexture)
 			: base(world, position, width, height, mass, turn, texture)
 		{
 			this.world = world;
+
+			this.bodyTexture = bodyTexture;
+			this.cannonTexture = cannonTexture;
+			this.turretTexture = turretTexture;
+			this.wheelTexture = wheelTexture;
+
+			this.bodyOrigin = new Vector2(bodyTexture.Width / 2, bodyTexture.Height / 2);
+			this.cannonOrigin = new Vector2(cannonTexture.Width / 2, cannonTexture.Height / 2);
+			this.turretOrigin = new Vector2(turretTexture.Width / 2, turretTexture.Height / 2);
+			this.wheelOrigin = new Vector2(wheelTexture.Width / 2, wheelTexture.Height / 2);
+
+			this.projectileTexture = projectileTexture;
 
 			if (width > height)
 			{
@@ -129,13 +152,13 @@ namespace GunBond
 
 		public bool BodyOnCollision(Fixture fix1, Fixture fix2, Contact contact)
 		{
-			if (fix2.FixtureId > 6)
+			if (fix2.Body.IsBullet == true)
 			{
 				health -= 10;
 			}
 			return true;
 		}
-		
+
 		protected override void HandleInput(GameTime gameTime)
 		{
 			oldActivity = activity;
@@ -296,7 +319,9 @@ namespace GunBond
 			}
 			if (keyState.IsKeyUp(Keys.Enter) && oldState.IsKeyDown(Keys.Enter) && p == null)
 			{
-				p = new Projectile(world, new Vector2(ConvertUnits.ToDisplayUnits(cannon.Body.Position.X) + (float)Math.Cos(cannon.Body.Rotation - (float)Math.PI / 2) * 50, ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y) + (float)Math.Sin(cannon.Body.Rotation - (float)Math.PI / 2) * 50), 16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, shootPower, wind, texture);
+				Texture2D temp = projectileTexture;
+				p = new Projectile(world, new Vector2(ConvertUnits.ToDisplayUnits(cannon.Body.Position.X) + (float)Math.Cos(cannon.Body.Rotation - (float)Math.PI / 2) * 50, ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y) + (float)Math.Sin(cannon.Body.Rotation - (float)Math.PI / 2) * 50), 
+				                   16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, shootPower, wind, temp);
 				activity = Activity.Idle;
 				shootPower = 0f;
 			}
@@ -304,14 +329,15 @@ namespace GunBond
 		
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			//These first two draw calls draw the upper and lower body independently
-			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(body.Position.X), (int)ConvertUnits.ToDisplayUnits(body.Position.Y), (int)width, (int)(height - (width / 2))), null, Color.White, body.Rotation, origin, SpriteEffects.None, 0f);
-			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.Y), (int)width, (int)width), null, Color.White, wheel.Body.Rotation, origin, SpriteEffects.None, 0f);
-			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), null, Color.White, cannon.Body.Rotation, new Vector2(origin.X, origin.Y + ConvertUnits.ToDisplayUnits(height / 4)), SpriteEffects.None, 0f);
-			spriteBatch.Draw(texture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width, (int)height / 2), null, Color.White, 0f, origin, SpriteEffects.None, 0f);
+			// Draw, body, wheel, cannon, and turret parts independently
+			spriteBatch.Draw(bodyTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(body.Position.X), (int)ConvertUnits.ToDisplayUnits(body.Position.Y), (int)width, (int)(height - (width / 2))), null, Color.White, body.Rotation, bodyOrigin, SpriteEffects.None, 0f);
+			spriteBatch.Draw(wheelTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.Y), (int)width, (int)width), null, Color.White, wheel.Body.Rotation, wheelOrigin, SpriteEffects.None, 0f);
+			spriteBatch.Draw(cannonTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), null, Color.White, cannon.Body.Rotation, new Vector2(cannonOrigin.X, cannonOrigin.Y + (height / 4)), SpriteEffects.None, 0f);
+			spriteBatch.Draw(turretTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width, (int)height / 2), null, Color.White, 0f, turretOrigin, SpriteEffects.None, 0f);
+			// spriteBatch.Draw(cannonTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), null, Color.White, cannon.Body.Rotation, new Vector2(cannonOrigin.X, cannonOrigin.Y + ConvertUnits.ToDisplayUnits(height / 4)), SpriteEffects.None, 0f);
 
 			//This last draw call shows how to draw these two bodies with one texture (drawn semi-transparent here so you can see the inner workings)            
-			spriteBatch.Draw(texture, new Rectangle((int)Position.X, (int)(Position.Y), (int)width, (int)height), null, new Color(1, 1, 1, 0.5f), body.Rotation, origin, SpriteEffects.None, 0f);
+			// spriteBatch.Draw(texture, new Rectangle((int)Position.X, (int)(Position.Y), (int)width, (int)height), null, new Color(1, 1, 1, 0.5f), body.Rotation, origin, SpriteEffects.None, 0f);
 
 			// Draw projectile
 			if (p != null)

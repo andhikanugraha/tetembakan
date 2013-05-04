@@ -1,6 +1,7 @@
 #region Using Statements
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,6 +23,9 @@ namespace GunBond
 	/// </summary>
 	public class Game1 : Game
 	{
+		[DllImport("user32.dll", CharSet = CharSet.Auto)]
+		public static extern uint MessageBox(IntPtr hWnd, String text, String caption, uint type);
+
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		SpriteFont spriteFont;
@@ -40,6 +44,7 @@ namespace GunBond
 
 		int turn;
 		int players;
+		int playernum, teamnum;
 
 		public Game1 ()
 		{
@@ -54,6 +59,8 @@ namespace GunBond
 			players = 8;
 			Random r = new Random();
 			turn = r.Next(players);
+			playernum = 0;
+			teamnum = 1;
 			player1 = new Player[players / 2];
 			player2 = new Player[players / 2];
 			body = new Texture2D[4];
@@ -197,6 +204,30 @@ namespace GunBond
 				{
 					turn = (turn + 1) % players;
 				}
+			}
+			if (team1.IsLose())
+			{
+				if (playernum % 2 == 0)
+				{
+					MessageBox(new IntPtr(0), "You Lose!", "Game Over", 0);
+				}
+				else
+				{
+					MessageBox(new IntPtr(0), "You Win!", "Game Over", 0);
+				}
+				this.Exit();
+			}
+			if (team2.IsLose())
+			{
+				if (playernum % 2 != 0)
+				{
+					MessageBox(new IntPtr(0), "You Lose!", "Game Over", 0);
+				}
+				else
+				{
+					MessageBox(new IntPtr(0), "You Win!", "Game Over", 0);
+				}
+				this.Exit();
 			}
 			world.Step((float)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.001));
 

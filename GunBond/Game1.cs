@@ -28,8 +28,9 @@ namespace GunBond
 
 		World world;
 
+		Texture2D backgroundTexture;
+		Texture2D blockTexture;
 		Texture2D squareTexture;
-		Texture2D projectileTexture;
 		Texture2D pointerTexture;
 		StaticPhysicsObject ground;
 		StaticPhysicsObject[] wall;
@@ -92,9 +93,17 @@ namespace GunBond
 			//TODO: use this.Content to load your game content here 
 
 			// textures
+			backgroundTexture = Content.Load<Texture2D>("background");
+			blockTexture = Content.Load<Texture2D>("Block");
 			squareTexture = Content.Load<Texture2D>("square");
-			projectileTexture = Content.Load<Texture2D>("projectile");
 			pointerTexture = Content.Load<Texture2D>("pointer");
+			Texture2D projectileTexture = Content.Load<Texture2D>("projectile");
+			Texture2D shootTexture = Content.Load<Texture2D>("shootMeter");
+			Texture2D[] healthTexture = new Texture2D[6];
+			for (int i = 0; i < healthTexture.Length; i++)
+			{
+				healthTexture[i] = Content.Load<Texture2D>("health" + i);
+			}
 			for (int i = 0; i < 4; i++)
 			{
 				body[i] = Content.Load<Texture2D>("body" + (i + 1));
@@ -106,27 +115,29 @@ namespace GunBond
 				wheel[i] = Content.Load<Texture2D>("wheel" + (i + 1));
 				wheela[i] = Content.Load<Texture2D>("wheela" + (i + 1));
 			}
-			ground = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 500), GraphicsDevice.Viewport.Width, 96, squareTexture);
-			wall[0] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 450), 32, 128, squareTexture);
-			wall[1] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2 - 32, 450), 32, 64, squareTexture);
-			wall[2] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2 + 32, 450), 32, 64, squareTexture);
-			wall[3] = new StaticPhysicsObject(world, new Vector2(16, 450), 32, 192, squareTexture);
-			wall[4] = new StaticPhysicsObject(world, new Vector2(48, 450), 32, 128, squareTexture);
-			wall[5] = new StaticPhysicsObject(world, new Vector2(80, 450), 32, 64, squareTexture);
-			wall[6] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width - 16, 450), 32, 192, squareTexture);
-			wall[7] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width - 48, 450), 32, 128, squareTexture);
-			wall[8] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width - 80, 450), 32, 64, squareTexture);
+			ground = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 500), GraphicsDevice.Viewport.Width, 96, blockTexture);
+			wall[0] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2, 450), 32, 128, blockTexture);
+			wall[1] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2 - 32, 450), 32, 64, blockTexture);
+			wall[2] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width / 2 + 32, 450), 32, 64, blockTexture);
+			wall[3] = new StaticPhysicsObject(world, new Vector2(16, 450), 32, 192, blockTexture);
+			wall[4] = new StaticPhysicsObject(world, new Vector2(48, 450), 32, 128, blockTexture);
+			wall[5] = new StaticPhysicsObject(world, new Vector2(80, 450), 32, 64, blockTexture);
+			wall[6] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width - 16, 450), 32, 192, blockTexture);
+			wall[7] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width - 48, 450), 32, 128, blockTexture);
+			wall[8] = new StaticPhysicsObject(world, new Vector2(GraphicsDevice.Viewport.Width - 80, 450), 32, 64, blockTexture);
 			// Team 1
 			for (int i = 0, x = 16; i < player1.Length; i++, x += 64)
 			{
-				player1[i] = new Player(world, new Vector2(x, 0), 32, 64, 20, 2 * i, squareTexture, body[i], cannon[i], turret[i], wheel[i], projectileTexture);
+				CharacterTexture chTexture = new CharacterTexture(body[i], cannon[i], turret[i], wheel[i], projectileTexture, shootTexture, healthTexture);
+				player1[i] = new Player(world, new Vector2(x, 0), 32, 64, 20, 2 * i, squareTexture, chTexture);
 			}
 			team1 = new Team(player1);
 			// Team 2
 			// int mid = players / 2;
 			for (int i = 0, x = GraphicsDevice.Viewport.Width - 16; i < player2.Length; i++, x -= 64)
 			{
-				player2[i] = new Player(world, new Vector2(x, 0), 32, 64, 20, (2 * i) + 1, squareTexture, bodya[i], cannona[i], turreta[i], wheela[i], projectileTexture);
+				CharacterTexture chTexture = new CharacterTexture(bodya[i], cannona[i], turreta[i], wheela[i], projectileTexture, shootTexture, healthTexture);
+				player2[i] = new Player(world, new Vector2(x, 0), 32, 64, 20, (2 * i) + 1, squareTexture, chTexture);
 			}
 			team2 = new Team(player2);
 
@@ -202,11 +213,12 @@ namespace GunBond
 		
 			//TODO: Add your drawing code here
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			ground.Draw(spriteBatch);
+			spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
 			for (int i = 0; i < wall.Length; i++)
 			{
 				wall[i].Draw(spriteBatch);
 			}
+			ground.Draw(spriteBatch);
 			for (int i = 0; i < players / 2; i++)
 			{
 				if (player1[i] != null)

@@ -38,16 +38,13 @@ namespace GunBond
 		private const float rotateSpeed = 2;
 		private const float jumpImpulse = -200;
 		
-		private Texture2D bodyTexture;
-		private Texture2D cannonTexture;
-		private Texture2D turretTexture;
-		private Texture2D wheelTexture;
 		private Vector2 bodyOrigin;
 		private Vector2 cannonOrigin;
 		private Vector2 turretOrigin;
 		private Vector2 wheelOrigin;
 
-		private Texture2D projectileTexture;
+		private CharacterTexture chTexture;
+		private Texture2D healthTexture;
 
 		protected override void Dispose (bool disposing)
 		{
@@ -68,22 +65,17 @@ namespace GunBond
 			base.Dispose (disposing);
 		}
 
-		public Player(World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture, Texture2D bodyTexture, Texture2D cannonTexture, Texture2D turretTexture, Texture2D wheelTexture, Texture2D projectileTexture)
+		public Player(World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture, CharacterTexture chTexture)
 			: base(world, position, width, height, mass, turn, texture)
 		{
 			this.world = world;
 
-			this.bodyTexture = bodyTexture;
-			this.cannonTexture = cannonTexture;
-			this.turretTexture = turretTexture;
-			this.wheelTexture = wheelTexture;
+			this.chTexture = chTexture;
 
-			this.bodyOrigin = new Vector2(bodyTexture.Width / 2, bodyTexture.Height / 2);
-			this.cannonOrigin = new Vector2(cannonTexture.Width / 2, cannonTexture.Height / 2);
-			this.turretOrigin = new Vector2(turretTexture.Width / 2, turretTexture.Height / 2);
-			this.wheelOrigin = new Vector2(wheelTexture.Width / 2, wheelTexture.Height / 2);
-
-			this.projectileTexture = projectileTexture;
+			this.bodyOrigin = new Vector2(chTexture.body.Width / 2, chTexture.body.Height / 2);
+			this.cannonOrigin = new Vector2(chTexture.cannon.Width / 2, chTexture.cannon.Height / 2);
+			this.turretOrigin = new Vector2(chTexture.turret.Width / 2, chTexture.turret.Height / 2);
+			this.wheelOrigin = new Vector2(chTexture.wheel.Width / 2, chTexture.wheel.Height / 2);
 
 			if (width > height)
 			{
@@ -339,7 +331,7 @@ namespace GunBond
 			if (keyState.IsKeyUp(Keys.Enter) && oldState.IsKeyDown(Keys.Enter) && p == null)
 			{
 				p = new Projectile(world, new Vector2(ConvertUnits.ToDisplayUnits(cannon.Body.Position.X) + (float)Math.Cos(cannon.Body.Rotation - (float)Math.PI / 2) * 50, ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y) + (float)Math.Sin(cannon.Body.Rotation - (float)Math.PI / 2) * 50), 
-				                   16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, shootPower, wind, projectileTexture);
+				                   16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, shootPower, wind, chTexture.projectile);
 				activity = Activity.Idle;
 				shootPower = 0f;
 			}
@@ -348,15 +340,14 @@ namespace GunBond
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			// Draw, body, wheel, cannon, and turret parts independently
-			spriteBatch.Draw(bodyTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(body.Position.X), (int)ConvertUnits.ToDisplayUnits(body.Position.Y), (int)width, (int)(height - (width / 2))), 
+			spriteBatch.Draw(chTexture.body, new Rectangle((int)ConvertUnits.ToDisplayUnits(body.Position.X), (int)ConvertUnits.ToDisplayUnits(body.Position.Y), (int)width, (int)(height - (width / 2))), 
 			                 null, Color.White, body.Rotation, bodyOrigin, SpriteEffects.None, 0f);
-			spriteBatch.Draw(wheelTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.Y), (int)width, (int)width), 
+			spriteBatch.Draw(chTexture.wheel, new Rectangle((int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.Y), (int)width, (int)width), 
 			                 null, Color.White, wheel.Body.Rotation, wheelOrigin, SpriteEffects.None, 0f);
-			spriteBatch.Draw(cannonTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), 
+			spriteBatch.Draw(chTexture.cannon, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), 
 			                 null, Color.White, cannon.Body.Rotation, new Vector2(cannonOrigin.X, cannonOrigin.Y + (height / 4)), SpriteEffects.None, 0f);
-			spriteBatch.Draw(turretTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width, (int)height / 2), 
+			spriteBatch.Draw(chTexture.turret, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width, (int)height / 2), 
 			                 null, Color.White, 0f, turretOrigin, SpriteEffects.None, 0f);
-			// spriteBatch.Draw(cannonTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), null, Color.White, cannon.Body.Rotation, new Vector2(cannonOrigin.X, cannonOrigin.Y + ConvertUnits.ToDisplayUnits(height / 4)), SpriteEffects.None, 0f);
 
 			//This last draw call shows how to draw these two bodies with one texture (drawn semi-transparent here so you can see the inner workings)            
 			// spriteBatch.Draw(texture, new Rectangle((int)Position.X, (int)(Position.Y), (int)width, (int)height), null, new Color(1, 1, 1, 0.5f), body.Rotation, origin, SpriteEffects.None, 0f);
@@ -367,11 +358,36 @@ namespace GunBond
 				p.Draw(spriteBatch);
 			}
 			// Draw health
-			spriteBatch.Draw(texture, new Rectangle((int) Position.X - 30, (int)Position.Y - 100, (int)(width * health /50), 16), null, Color.Green, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+			if (health == 100)
+			{
+				healthTexture = chTexture.healthBar[0];
+			}
+			else if (health >= 80 && health < 100)
+			{
+				healthTexture = chTexture.healthBar[1];
+			}
+			else if (health >= 60 && health < 80)
+			{
+				healthTexture = chTexture.healthBar[2];
+			}
+			else if (health >= 40 && health < 60)
+			{
+				healthTexture = chTexture.healthBar[3];
+			}
+			else if (health >= 20 && health < 40)
+			{
+				healthTexture = chTexture.healthBar[4];
+			}
+			else if (health >= 0 && health < 20)
+			{
+				healthTexture = chTexture.healthBar[5];
+			}
+			spriteBatch.Draw(healthTexture, new Rectangle((int) Position.X - 30, (int)Position.Y - 100, (int)(width * health /50), 16), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
 			// Draw shoot power
 			if (keyState.IsKeyDown(Keys.Enter))
 			{
-				spriteBatch.Draw(texture, new Rectangle(0, 0, 24, (int)(5 * shootPower)), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+				spriteBatch.Draw(chTexture.shootMeter, new Rectangle(0, 0, 24, (int)(5 * shootPower)), new Rectangle(0, 0, 24, (int)(5 * shootPower)), 
+				                 Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
 			}
 		}
 		

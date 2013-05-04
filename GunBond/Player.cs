@@ -48,7 +48,26 @@ namespace GunBond
 		private Vector2 wheelOrigin;
 
 		private Texture2D projectileTexture;
-		
+
+		protected override void Dispose (bool disposing)
+		{
+			if (disposing)
+			{
+				// world.RemoveJoint(motor);
+				motor = null;
+				world.RemoveBody(wheel.Body);
+				// wheel.Dispose();
+				wheel = null;
+				// world.RemoveJoint(turret);
+				turret = null;
+				world.RemoveBody(cannon.Body);
+				// cannon.Dispose();
+				cannon = null;
+				world.ProcessChanges();
+			}
+			base.Dispose (disposing);
+		}
+
 		public Player(World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture, Texture2D bodyTexture, Texture2D cannonTexture, Texture2D turretTexture, Texture2D wheelTexture, Texture2D projectileTexture)
 			: base(world, position, width, height, mass, turn, texture)
 		{
@@ -319,9 +338,8 @@ namespace GunBond
 			}
 			if (keyState.IsKeyUp(Keys.Enter) && oldState.IsKeyDown(Keys.Enter) && p == null)
 			{
-				Texture2D temp = projectileTexture;
 				p = new Projectile(world, new Vector2(ConvertUnits.ToDisplayUnits(cannon.Body.Position.X) + (float)Math.Cos(cannon.Body.Rotation - (float)Math.PI / 2) * 50, ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y) + (float)Math.Sin(cannon.Body.Rotation - (float)Math.PI / 2) * 50), 
-				                   16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, shootPower, wind, temp);
+				                   16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, shootPower, wind, projectileTexture);
 				activity = Activity.Idle;
 				shootPower = 0f;
 			}
@@ -330,10 +348,14 @@ namespace GunBond
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			// Draw, body, wheel, cannon, and turret parts independently
-			spriteBatch.Draw(bodyTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(body.Position.X), (int)ConvertUnits.ToDisplayUnits(body.Position.Y), (int)width, (int)(height - (width / 2))), null, Color.White, body.Rotation, bodyOrigin, SpriteEffects.None, 0f);
-			spriteBatch.Draw(wheelTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.Y), (int)width, (int)width), null, Color.White, wheel.Body.Rotation, wheelOrigin, SpriteEffects.None, 0f);
-			spriteBatch.Draw(cannonTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), null, Color.White, cannon.Body.Rotation, new Vector2(cannonOrigin.X, cannonOrigin.Y + (height / 4)), SpriteEffects.None, 0f);
-			spriteBatch.Draw(turretTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width, (int)height / 2), null, Color.White, 0f, turretOrigin, SpriteEffects.None, 0f);
+			spriteBatch.Draw(bodyTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(body.Position.X), (int)ConvertUnits.ToDisplayUnits(body.Position.Y), (int)width, (int)(height - (width / 2))), 
+			                 null, Color.White, body.Rotation, bodyOrigin, SpriteEffects.None, 0f);
+			spriteBatch.Draw(wheelTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(wheel.Body.Position.Y), (int)width, (int)width), 
+			                 null, Color.White, wheel.Body.Rotation, wheelOrigin, SpriteEffects.None, 0f);
+			spriteBatch.Draw(cannonTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), 
+			                 null, Color.White, cannon.Body.Rotation, new Vector2(cannonOrigin.X, cannonOrigin.Y + (height / 4)), SpriteEffects.None, 0f);
+			spriteBatch.Draw(turretTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width, (int)height / 2), 
+			                 null, Color.White, 0f, turretOrigin, SpriteEffects.None, 0f);
 			// spriteBatch.Draw(cannonTexture, new Rectangle((int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.X), (int)ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y), (int)width / 2, (int)height / 2), null, Color.White, cannon.Body.Rotation, new Vector2(cannonOrigin.X, cannonOrigin.Y + ConvertUnits.ToDisplayUnits(height / 4)), SpriteEffects.None, 0f);
 
 			//This last draw call shows how to draw these two bodies with one texture (drawn semi-transparent here so you can see the inner workings)            

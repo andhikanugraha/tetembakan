@@ -15,16 +15,25 @@ namespace GunBond
 {
 	public class Character : PhysicsObject
 	{
-		public float forcePower;
+		public float forcePower = 50;
 		protected KeyboardState keyState;
 		protected KeyboardState oldState;
 		protected Projectile p;
 		protected int turn;
-		protected float health = 100;
+		public float health = 100;
 		protected float shootPower;
 		protected bool increasePower;
 		public float wind;
 		private Random r = new Random();
+
+		protected override void Dispose (bool disposing)
+		{
+			if (disposing)
+			{
+				r = null;
+			}
+			base.Dispose (disposing);
+		}
 
 		public Character (World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture) : base(world, position, width, height, mass, texture)
 		{
@@ -43,7 +52,7 @@ namespace GunBond
 					p.Dispose();
 					p = null;
 					nextWind();
-					return (turn + 1) % 2;
+					return (turn + 1);
 				}
 			}
 			return turn;
@@ -51,7 +60,7 @@ namespace GunBond
 
 		private void nextWind()
 		{
-			this.wind = (float)(r.Next (-2, 3));
+			this.wind = (float)(r.Next (-3, 4));
 		}
 
 		protected virtual void HandleInput(GameTime gameTime)

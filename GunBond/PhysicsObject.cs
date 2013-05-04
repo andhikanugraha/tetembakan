@@ -29,11 +29,10 @@ namespace GunBond
 		{
 			if (disposing)
 			{
+				texture = null;
 				fixture.Dispose();
 				fixture = null;
 				body = null;
-				texture.Dispose();
-				texture = null;
 			}
 		}
 		

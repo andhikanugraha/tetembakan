@@ -1,12 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="PhysicsObject.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Game1.cs">
     <Files>
-      <File FileName="Game1.cs" Line="91" Column="113" />
-      <File FileName="Character.cs" Line="44" Column="15" />
-      <File FileName="Player.cs" Line="324" Column="101" />
-      <File FileName="Projectile.cs" Line="22" Column="84" />
-      <File FileName="PhysicsObject.cs" Line="48" Column="1" />
+      <File FileName="Game1.cs" Line="130" Column="4" />
+      <File FileName="Character.cs" Line="23" Column="10" />
+      <File FileName="Player.cs" Line="69" Column="4" />
+      <File FileName="Projectile.cs" Line="35" Column="40" />
+      <File FileName="PhysicsObject.cs" Line="28" Column="20" />
+      <File FileName="Team.cs" Line="7" Column="20" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.Debugger.WatchPad">

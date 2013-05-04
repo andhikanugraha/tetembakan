@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace GunBond
 {
-	static class Program
+	/*static class Program
 	{
 		private static Game1 game;
 
@@ -20,5 +20,5 @@ namespace GunBond
 			game = new Game1 ();
 			game.Run ();
 		}
-	}
+	}*/
 }

@@ -44,9 +44,9 @@ namespace GunBond
 
 		int turn;
 		int players;
-		int playernum, teamnum;
+		int playernum;
 
-		public Game1 ()
+		public Game1 (int playernum, int players, int turn)
 		{
 			Window.Title = "GunBond";
 			graphics = new GraphicsDeviceManager (this);
@@ -56,11 +56,9 @@ namespace GunBond
 			graphics.PreferredBackBufferHeight = 600;
 			world =  new World(new Vector2(0, 9.82f));
 			wall = new StaticPhysicsObject[9];
-			players = 8;
-			Random r = new Random();
-			turn = r.Next(players);
-			playernum = 0;
-			teamnum = 1;
+			this.players = players;
+			this.turn = turn;
+			this.playernum = playernum;
 			player1 = new Player[players / 2];
 			player2 = new Player[players / 2];
 			body = new Texture2D[4];

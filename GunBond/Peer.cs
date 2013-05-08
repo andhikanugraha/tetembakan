@@ -12,21 +12,22 @@ using System.Timers;
 namespace GunBond
 {
 
-    enum GameState
+    public enum GameState
     {
         Connect,
         Lobby,
         Room,
         Reconnect
     }
-    class Peer
+    public class Peer
     {
         /* THIS peer information */
-        bool isCreator;
-        PeerInfo peerInfo;
-        Room currentRoom; // Peer draw room method variable
-        GameState state;
-		Game1 game;
+        public bool isCreator;
+        public PeerInfo peerInfo;
+        public Room currentRoom; // Peer draw room method variable
+        public GameState state;
+		public int turn = 0;
+		//Game1 game;
 
         /* Peer to Tracker communication */
         Socket peerToTrackerSocket;
@@ -73,6 +74,9 @@ namespace GunBond
         MessageType lastMessageClient;
         System.Timers.Timer keepAliveSenderCreator;
         System.Timers.Timer keepAliveResponseCreator;
+
+		public Message msgReceived = new Message(new byte[1024]);
+		public Message msgResponse = new Message();
 
         public Peer()
         {
@@ -233,8 +237,8 @@ namespace GunBond
             {
                 peerToTrackerSocket.EndReceive(ar);
 
-                Message msgReceived = new Message(msgByte);
-                Message msgResponse = new Message();
+                msgReceived = new Message(msgByte);
+                msgResponse = new Message();
                 byte[] message;
                 switch (msgReceived.msgType)
                 {
@@ -388,8 +392,8 @@ namespace GunBond
                 Socket peerSocket = (Socket)ar.AsyncState;
                 peerSocket.EndReceive(ar);
 
-                Message msgReceived = new Message(msgByteP2PServer);
-                Message msgResponse = new Message();
+                msgReceived = new Message(msgByteP2PServer);
+                msgResponse = new Message();
 
                 switch (msgReceived.msgType)
                 {
@@ -479,7 +483,7 @@ namespace GunBond
             {
                 peerToPeerSocketClient.EndReceive(ar);
 
-                Message msgReceived = new Message(msgByteP2PClient);
+                msgReceived = new Message(msgByteP2PClient);
                 switch (msgReceived.msgType)
                 {
                     case MessageType.RoomInfo:
@@ -528,6 +532,7 @@ namespace GunBond
                             Console.WriteLine(peer.getIP());
                             Console.WriteLine(peer.getUsername());
 						}
+					/*
 						Thread t = new Thread( () => {
 						Thread.CurrentThread.IsBackground = true;
 						game = new Game1 (this.currentRoom.getIDOnRoom(this.peerInfo.getID ()),
@@ -535,6 +540,7 @@ namespace GunBond
 						game.Run ();
 						});
 						t.Start();
+					 */
                         break;
                     case MessageType.GameUpdate:
                         foreach (PeerInfo peer in this.currentRoom.getConnectedPeers())
@@ -731,12 +737,13 @@ namespace GunBond
                     else
 					{
 						Random r = new Random();
-						int turn = r.Next(this.currentRoom.getConnectedPeers().Count);
+						turn = r.Next(this.currentRoom.getConnectedPeers().Count);
                         byte[] msg = new Message(MessageType.Start, this.peerInfo.getID(), turn, this.currentRoom.getRoomID()).toByte();
                         foreach (PeerHandler peer in peerList)
                         {
                             peer.socket.BeginSend(msg, 0, msg.Length, SocketFlags.None, new AsyncCallback(onSendPeerServer), peer.socket);
 						}
+						/*
 						Thread t = new Thread( () => {
 							Thread.CurrentThread.IsBackground = true;
 							game = new Game1 (this.currentRoom.getIDOnRoom(this.peerInfo.getID ()),
@@ -744,6 +751,7 @@ namespace GunBond
 							game.Run ();
 						});
 						t.Start();
+						*/
                     }
                 }
                 else
@@ -882,6 +890,7 @@ namespace GunBond
             return (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds;
         }
 
+		/*
         static void Main(string[] args)
         {
             string cmd = String.Empty;
@@ -928,5 +937,6 @@ namespace GunBond
                 }
             }
         }
+        */
     }
 }

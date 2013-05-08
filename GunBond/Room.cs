@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GunBond
 {
-    class Room
+    public class Room
     {
         PeerInfo creator;
         string roomID;
@@ -137,13 +137,20 @@ namespace GunBond
             return s;
         }
 
-        public string toStringWithoutPeers()
-        {
-            string s = "------------------------------\n";
-            s += "RoomID = " + roomID + " [MaxPlayer = " + maxPlayer + "]\n";
-            s += "Creator = " + creator.ToString() + "\n";
-            s += "------------------------------";
-            return s;
-        }
+		public string toStringWithoutPeers()
+		{
+			string s = "------------------------------\n";
+			s += "RoomID = " + roomID + " [MaxPlayer = " + maxPlayer + "]\n";
+			s += "Creator = " + creator.ToString() + "\n";
+			s += "------------------------------";
+			return s;
+		}
+
+		public string toStringWithoutPeers2()
+		{
+			string s = "";
+			s += roomID + " (" + maxPlayer + " Players)";
+			return s;
+		}
     }
 }

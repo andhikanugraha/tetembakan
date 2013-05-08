@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GunBond
 {
-    enum MessageType
+    public enum MessageType
     {
         Handshake,          // Handshake message from peer to tracker            : <pstr><reserved>135<username>
         HandshakeResponse,  // Handshake response message from tracker to peer   : <pstr><reserved>136<peer_info>
@@ -30,7 +30,7 @@ namespace GunBond
         Null                // Undefined Message type
     }
 
-    class Message
+    public class Message
     {
         public MessageType msgType; //Message type
         public string pstr; //protocol string identifier = "GunbondGame"

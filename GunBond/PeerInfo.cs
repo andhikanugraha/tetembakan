@@ -6,7 +6,7 @@ using System.Net.Sockets;
 
 namespace GunBond
 {
-    class PeerInfo
+    public class PeerInfo
     {
         string peerIP;
         int peerID;
@@ -91,5 +91,10 @@ namespace GunBond
         {
             return this.peerIP + ":" + this.port + ":" + this.peerID + ":" + this.username;
         }
+
+		public string ToString2()
+		{
+			return this.username;
+		}
     }
 }

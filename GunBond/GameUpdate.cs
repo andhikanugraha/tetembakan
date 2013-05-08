@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GunBond
 {
-    class GameUpdate
+    public class GameUpdate
     {
         int param1;
         int param2;

@@ -36,7 +36,12 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="MonoGame.Framework" />
+    <Reference Include="MonoGame.Framework, Version=3.0.1.0, Culture=neutral">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DGui">
+      <HintPath>..\..\..\CobaGUI\CobaGUI\bin\Debug\DGui.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
@@ -151,6 +156,12 @@
     <Compile Include="Peer.cs" />
     <Compile Include="PeerInfo.cs" />
     <Compile Include="Room.cs" />
+    <Compile Include="ScreenManager\HandshakeScreen.cs" />
+    <Compile Include="ScreenManager\Screen.cs" />
+    <Compile Include="ScreenManager\LobbyScreen.cs" />
+    <Compile Include="ScreenManager\RoomScreen.cs" />
+    <Compile Include="ScreenManager\CreateRoomScreen.cs" />
+    <Compile Include="ScreenManager\GameplayScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />
@@ -158,6 +169,7 @@
   <ItemGroup>
     <Folder Include="Content\" />
     <Folder Include="Farseer Physics Engine 3.2 Class\" />
+    <Folder Include="ScreenManager\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -294,6 +306,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Block.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\LucidaConsole.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Miramonte.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\MiramonteBold.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\MiramonteMedium.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\MiramonteTiny.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

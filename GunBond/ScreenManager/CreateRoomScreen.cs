@@ -61,7 +61,7 @@ namespace GunBond
 			maxPlayerTextBox = new DTextBox(guiManager);
 			layout.Add(maxPlayerTextBox);
 			maxPlayerTextBox.Initialize();
-			maxPlayerTextBox.Text = "2";
+			maxPlayerTextBox.Text = "8";
 			maxPlayerTextBox.Position = new Vector2(400, 250) - (maxPlayerTextBox.Size / 2);
 			form.AddPanel(maxPlayerTextBox);
 

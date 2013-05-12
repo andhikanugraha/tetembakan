@@ -25,7 +25,7 @@ namespace GunBond
 	public enum ScreenState { Handshake, Lobby, CreateRoom, Room, Gameplay };
 	public class Game1 : Game
 	{
-		public Peer peer = new Peer();
+		public Peer peer = Peer.Instance;
 		public ScreenState currentScreen;
 		HandshakeScreen handshakeScreen;
 		LobbyScreen lobbyScreen;

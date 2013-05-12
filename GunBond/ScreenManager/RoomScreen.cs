@@ -104,7 +104,7 @@ namespace GunBond
 
 			if (game.needToUpdateRoom)
 			{
-				game.peer.updateRoom();
+				game.peer.updateRoom(0,0);
 				if (playerList.Items.Count != 0)
 				{
 					playerList.ClearItems();

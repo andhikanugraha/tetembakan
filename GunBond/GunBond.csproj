@@ -40,7 +40,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="DGui">
-      <HintPath>..\..\..\CobaGUI\CobaGUI\bin\Debug\DGui.dll</HintPath>
+      <HintPath>bin\Debug\DGui.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

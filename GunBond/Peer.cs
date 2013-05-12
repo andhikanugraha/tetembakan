@@ -11,7 +11,6 @@ using System.Timers;
 
 namespace GunBond
 {
-
     public enum GameState
     {
         Connect,
@@ -20,8 +19,21 @@ namespace GunBond
         Reconnect
     }
     public class Peer
-    {
-        /* THIS peer information */
+	{
+		private static Peer instance;
+
+		public static Peer Instance
+		{
+			get 
+			{
+				if (instance == null)
+				{
+					instance = new Peer();
+				}
+				return instance;
+			}
+		}
+		/* THIS peer information */
         public bool isCreator;
         public PeerInfo peerInfo;
         public Room currentRoom; // Peer draw room method variable
@@ -78,7 +90,7 @@ namespace GunBond
 		public Message msgReceived = new Message(new byte[1024]);
 		public Message msgResponse = new Message();
 
-        public Peer()
+        private Peer()
         {
             this.state = GameState.Connect;
             this.isCreator = false;
@@ -385,6 +397,12 @@ namespace GunBond
             }
         }
 
+		public Queue<Message> messageQueue = new Queue<Message>();
+
+		public void addQueue(Message m) {
+			messageQueue.Enqueue(m);
+		}
+
         private void onReceivePeerServer(IAsyncResult ar)
         {
             try
@@ -418,8 +436,9 @@ namespace GunBond
                         foreach (PeerInfo peer in this.currentRoom.getConnectedPeers())
                         {
 							if (cubenode[this.currentRoom.getIDOnRoom(this.peerInfo.getID())].Contains(this.currentRoom.getIDOnRoom(peer.getID())))
-                                System.Console.WriteLine(peer.ToString() + " -> " + this.peerInfo.ToString() + " : " + msgReceived.timestamp + msgReceived.gameUpdate.ToString());
+                                System.Console.WriteLine(peer.ToString() + " -> " + this.peerInfo.ToString() + " : " + msgReceived.timestamp + " " + msgReceived.gameUpdate.ToString());
                         }
+						addQueue(msgReceived);
                         break;
 
                     case MessageType.Quit:
@@ -548,6 +567,7 @@ namespace GunBond
 							if (cubenode[this.currentRoom.getIDOnRoom(this.peerInfo.getID())].Contains(this.currentRoom.getIDOnRoom(peer.getID())))
                                 System.Console.WriteLine(peer.ToString() + " -> " + this.peerInfo.ToString() + " : " + msgReceived.timestamp + msgReceived.gameUpdate.ToString());
                         }
+						addQueue(msgReceived);
                         break;
                 }
                 if (msgReceived.msgType != MessageType.CreatorQuit)
@@ -685,14 +705,14 @@ namespace GunBond
             }
         }
 
-        public void updateRoom()
+        public void updateRoom(int param1, double param2)
         {
             try
             {
                 if (isCreator)
                 {
                     this.lastMessage = MessageType.GameUpdate;
-                    Message m = new Message(MessageType.GameUpdate, getCurrentTime(), new GameUpdate(1, 2, 3));
+                    Message m = new Message(MessageType.GameUpdate, getCurrentTime(), new GameUpdate(param1,param2));
                     byte[] msg = m.toByte();
                     foreach (PeerHandler peer in peerList)
                     {
@@ -701,13 +721,13 @@ namespace GunBond
                     foreach (PeerInfo peer in this.currentRoom.getConnectedPeers())
                     {
 						if (cubenode[this.currentRoom.getIDOnRoom(this.peerInfo.getID())].Contains(this.currentRoom.getIDOnRoom(peer.getID())))
-                            System.Console.WriteLine(peer.ToString() + " -> " + this.peerInfo.ToString() + " : " + m.timestamp + m.gameUpdate.ToString());
+                            System.Console.WriteLine(peer.ToString() + " -> " + this.peerInfo.ToString() + " : " + m.timestamp +" " + m.gameUpdate.ToString());
                     }
                 }
                 else
                 {
                     this.lastMessageClient = MessageType.GameUpdate;
-                    byte[] msg = new Message(MessageType.GameUpdate, getCurrentTime(), new GameUpdate(1,2,3)).toByte();
+                    byte[] msg = new Message(MessageType.GameUpdate, getCurrentTime(), new GameUpdate(param1, param2)).toByte();
 
                     peerToPeerSocketClient.BeginSend(msg, 0, msg.Length, SocketFlags.None,
                                                     new AsyncCallback(onSendPeerClient), null);
@@ -715,7 +735,7 @@ namespace GunBond
             }
             catch (Exception e)
             {
-                Console.WriteLine("quitRoom exception : {0}", e.Message);
+                Console.WriteLine("updateRoom exception : {0}", e.Message);
                 Console.WriteLine(e.Source);
                 Console.WriteLine(e.InnerException);
                 Console.WriteLine(e.StackTrace);

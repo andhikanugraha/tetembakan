@@ -97,7 +97,6 @@ namespace GunBond
 			foreach (PeerInfo p in connectedPeers) {
 				l.Add (p.getID());
 			}
-			l.Sort ();
 			return l.IndexOf (peerID) + 1;
 		}
 

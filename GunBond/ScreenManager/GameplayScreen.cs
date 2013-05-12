@@ -29,8 +29,9 @@ namespace GunBond
 		World world;
 		
 		public int turn;
-		public int players;
-		public int playernum;
+		public static int players;
+		public static int playernum;
+		public static long lastUpdate;
 
 
 		public GameplayScreen (Game1 game): base(game)
@@ -47,7 +48,7 @@ namespace GunBond
 		{
 			playernum = game.peer.currentRoom.getIDOnRoom(game.peer.peerInfo.getID());
 			players = game.peer.currentRoom.getConnectedPeers().Count;
-			turn = game.peer.turn;
+			turn = (game.peer.isCreator) ? game.peer.turn : game.peer.msgReceived.turn;
 
 			Console.WriteLine(playernum + " : " + players + " : " + turn);
 			
@@ -205,7 +206,7 @@ namespace GunBond
 					MessageBox(new IntPtr(0), "You Win!", "Game Over", 0);
 				}
 
-				game.Exit();
+				game.currentScreen = ScreenState.Room;
 			}
 
 			world.Step((float)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.001));

@@ -65,6 +65,44 @@ namespace GunBond
 			base.Dispose (disposing);
 		}
 
+		private static bool getKeyState(int param, bool keyup, Keys k) {
+			if (!keyup) {
+				switch(k) {
+				case Keys.A :
+					return (param&1) > 0;
+				case Keys.S :
+					return (param&2) > 0;
+				case Keys.D :
+					return (param&4) > 0;
+				case Keys.W :
+					return (param&8) > 0;
+				case Keys.Space :
+					return (param&16) > 0;
+				case Keys.Enter :
+					return (param&32) > 0;
+				default:
+					return false;
+				}
+			} else {
+				switch(k) {
+				case Keys.A :
+					return (param&64) > 0;
+				case Keys.S :
+					return (param&128) > 0;
+				case Keys.D :
+					return (param&256) > 0;
+				case Keys.W :
+					return (param&512) > 0;
+				case Keys.Space :
+					return (param&1024) > 0;
+				case Keys.Enter :
+					return (param&2048) > 0;
+				default:
+					return false;
+				}
+			}
+		}
+
 		public Player(World world, Vector2 position, float width, float height, float mass, int turn, Texture2D texture, CharacterTexture chTexture)
 			: base(world, position, width, height, mass, turn, texture)
 		{
@@ -174,31 +212,113 @@ namespace GunBond
 		{
 			oldActivity = activity;
 			keyState = Keyboard.GetState();
-			
-			HandleJumping(keyState, oldState, gameTime);
-			HandleAiming(keyState, oldState, gameTime);
-			
-			if (activity != Activity.Jumping)
-			{
-				HandleRunning(keyState, oldState, gameTime);
+			int param1 = 0;
+			//bool goAhead = true;
+			//Console.WriteLine ("turn = " + turn + " playernum = " + (GameplayScreen.playernum -1) );
+			if (turn == GameplayScreen.playernum -1) {
+				if (keyState.IsKeyDown (Keys.A))
+					param1 += 1;
+				if (keyState.IsKeyDown (Keys.S))
+					param1 += 2;
+				if (keyState.IsKeyDown (Keys.D))
+					param1 += 4;
+				if (keyState.IsKeyDown (Keys.W))
+					param1 += 8;
+				if (keyState.IsKeyDown (Keys.Space))
+					param1 += 16;
+				if (keyState.IsKeyDown (Keys.Enter))
+					param1 += 32;
+				if (keyState.IsKeyUp (Keys.A))
+					param1 += 64;
+				if (keyState.IsKeyUp (Keys.S))
+					param1 += 128;
+				if (keyState.IsKeyUp (Keys.D))
+					param1 += 256;
+				if (keyState.IsKeyUp (Keys.W))
+					param1 += 512;
+				if (keyState.IsKeyUp (Keys.Space))
+					param1 += 1024;
+				if (keyState.IsKeyUp (Keys.Enter))
+					param1 += 2048;
+				if (param1 > 0 && param1 != 4032) {
+					Peer.Instance.updateRoom (param1, gameTime.ElapsedGameTime.TotalSeconds);
+					//Console.WriteLine (param1);
+					Console.WriteLine("A");
+				}
+				if (GameplayScreen.playernum == 1) {
+					HandleJumping (param1, oldState, gameTime);
+					HandleAiming (param1, oldState, gameTime);
+					
+					if (activity != Activity.Jumping)
+					{
+						HandleRunning(param1, oldState, gameTime);
+					}
+					
+					if (activity != Activity.Jumping && activity != Activity.Running)
+					{
+						HandleShooting(param1, oldState, gameTime);
+					}
+					
+					oldState = param1;
+				}
 			}
-			
-			if (activity != Activity.Jumping && activity != Activity.Running)
-			{
-				HandleShooting(keyState, oldState, gameTime);
+			if ((turn == GameplayScreen.playernum - 1 && (GameplayScreen.playernum != 1)) || turn != GameplayScreen.playernum - 1) {
+				if (Peer.Instance.messageQueue.Count != 0) {
+					Message msgToProcess = Peer.Instance.messageQueue.Dequeue();
+					param1 = msgToProcess.gameUpdate.param1;
+					long thisTimestamp = msgToProcess.timestamp;
+					Console.WriteLine("A");
+
+					//thisTimestamp = 1000000 * thisTimestamp;
+					//thisTimestamp += (long) (1000000 * Peer.Instance.msgReceived.gameUpdate.param2);
+
+					/*
+					if (thisTimestamp <= GameplayScreen.lastUpdate)
+						goAhead = false;
+					else {
+						GameplayScreen.lastUpdate = thisTimestamp;
+						goAhead = true;
+						Console.WriteLine("A");
+					}
+					*/
+
+					//Console.WriteLine("lu = " + GameplayScreen.lastUpdate.ToString() + " | tt = " + thisTimestamp.ToString() + " | goahead = " + goAhead.ToString()); 
+				}
+				else 
+					param1 = 4032;
+				HandleJumping (param1, oldState, gameTime);
+				HandleAiming (param1, oldState, gameTime);
+				
+				if (activity != Activity.Jumping)
+				{
+					HandleRunning(param1, oldState, gameTime);
+				}
+				
+				if (activity != Activity.Jumping && activity != Activity.Running)
+				{
+					HandleShooting(param1, oldState, gameTime);
+				}
+				
+				oldState = param1;
 			}
-			
-			oldState = keyState;
+
+
+			/*
+			if (!goAhead) {
+				param1 = 4032;
+			}
+			*/
+
 		}
 		
-		private void HandleJumping(KeyboardState state, KeyboardState oldState, GameTime gameTime)
+		private void HandleJumping(int state, int oldState, GameTime gameTime)
 		{
 			if (jumpDelayTime < 0)
 			{
 				jumpDelayTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
 			
-			if (state.IsKeyDown(Keys.Space) && activity != Activity.Jumping && activity != Activity.Shooting)
+			if (getKeyState(state,false,Keys.Space) && activity != Activity.Jumping && activity != Activity.Shooting)
 			{
 				if (jumpDelayTime >= 0)
 				{
@@ -212,14 +332,14 @@ namespace GunBond
 			
 			if (activity == Activity.Jumping)
 			{
-				if (keyState.IsKeyDown(Keys.D))
+				if (getKeyState(state,false,Keys.D))
 				{
 					if (body.LinearVelocity.X < 0)
 					{
 						body.LinearVelocity = new Vector2(-body.LinearVelocity.X * 2, body.LinearVelocity.Y);
 					}
 				}
-				else if (keyState.IsKeyDown(Keys.A))
+				else if (getKeyState(state,false,Keys.A))
 				{
 					if (body.LinearVelocity.X > 0)
 					{
@@ -229,9 +349,9 @@ namespace GunBond
 			}
 		}
 		
-		private void HandleRunning(KeyboardState state, KeyboardState oldState, GameTime gameTime)
+		private void HandleRunning(int state, int oldState, GameTime gameTime)
 		{
-			if (keyState.IsKeyDown(Keys.D) && p == null && activity != Activity.Shooting)
+			if (getKeyState(state,false,Keys.D) && p == null && activity != Activity.Shooting)
 			{
 				if (ConvertUnits.ToDisplayUnits(body.Position.X) > 800 - (width / 2))
 				{
@@ -243,7 +363,7 @@ namespace GunBond
 				}
 				activity = Activity.Running;
 			}
-			else if (keyState.IsKeyDown(Keys.A) && p == null && activity != Activity.Shooting)
+			else if (getKeyState(state,false,Keys.A) && p == null && activity != Activity.Shooting)
 			{
 				if (ConvertUnits.ToDisplayUnits(body.Position.X) < width / 2)
 				{
@@ -256,16 +376,16 @@ namespace GunBond
 				activity = Activity.Running;
 			}
 
-			if (keyState.IsKeyUp(Keys.D) && keyState.IsKeyUp(Keys.A) && activity != Activity.Shooting)
+			if (getKeyState(state,true,Keys.D) && getKeyState(state,true,Keys.A) && activity != Activity.Shooting)
 			{
 				motor.MotorSpeed = 0;
 				activity = Activity.Idle;
 			}
 		}
 
-		private void HandleAiming(KeyboardState keyState, KeyboardState oldState, GameTime gameTime)
+		private void HandleAiming(int state, int oldState, GameTime gameTime)
 		{
-			if (keyState.IsKeyDown(Keys.W) && p == null && activity != Activity.Shooting)
+			if (getKeyState(state,false,Keys.W) && p == null && activity != Activity.Shooting)
 			{
 				if (cannon.Body.Rotation < Math.PI / 2)
 				{
@@ -276,7 +396,7 @@ namespace GunBond
 					turret.MotorSpeed = 0;
 				}
 			}
-			else if (keyState.IsKeyDown(Keys.S) && p == null && activity != Activity.Shooting)
+			else if (getKeyState(state,false,Keys.S) && p == null && activity != Activity.Shooting)
 			{
 				if (cannon.Body.Rotation > -Math.PI / 2)
 				{
@@ -288,22 +408,22 @@ namespace GunBond
 				}
 			}
 
-			if (keyState.IsKeyUp(Keys.W) && keyState.IsKeyUp(Keys.S))
+			if (getKeyState(state,true,Keys.W) && getKeyState(state,true,Keys.S))
 			{
 				turret.MotorSpeed = 0;
 			}
 
 		}
 
-		private void HandleShooting(KeyboardState keyState, KeyboardState oldState, GameTime gameTime)
+		private void HandleShooting(int state, int oldState, GameTime gameTime)
 		{
-			if (keyState.IsKeyDown(Keys.Enter) && oldState.IsKeyUp(Keys.Enter) && p == null)
+			if (getKeyState(state,false,Keys.Enter) && getKeyState(oldState,true,Keys.Enter) && p == null)
 			{
 				shootPower = 0f;
 				increasePower = true;
 				activity = Activity.Shooting;
 			}
-			if (keyState.IsKeyDown(Keys.Enter) && oldState.IsKeyDown(Keys.Enter) && p == null)
+			if (getKeyState(state,false,Keys.Enter) && getKeyState(oldState,false,Keys.Enter) && p == null)
 			{
 				if (increasePower == true)
 				{
@@ -328,7 +448,7 @@ namespace GunBond
 					}
 				}
 			}
-			if (keyState.IsKeyUp(Keys.Enter) && oldState.IsKeyDown(Keys.Enter) && p == null)
+			if (getKeyState(state,true,Keys.Enter) && getKeyState(oldState,false,Keys.Enter) && p == null)
 			{
 				p = new Projectile(world, new Vector2(ConvertUnits.ToDisplayUnits(cannon.Body.Position.X) + (float)Math.Cos(cannon.Body.Rotation - (float)Math.PI / 2) * 50, ConvertUnits.ToDisplayUnits(cannon.Body.Position.Y) + (float)Math.Sin(cannon.Body.Rotation - (float)Math.PI / 2) * 50), 
 				                   16, 16, 1, cannon.Body.Rotation - (float)Math.PI / 2, shootPower, wind, chTexture.projectile);

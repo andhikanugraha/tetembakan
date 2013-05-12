@@ -48,7 +48,7 @@ namespace GunBond
         public const int portSize = 4;
         public const int usernameSize = 10;
         public const int peerInfoSize = IPAddressSize + peerIdSize + portSize + usernameSize;
-        public const int gameUpdateSize = 12;
+        public const int gameUpdateSize = 36;
 
         /* NETWORK */
         public const int defaultMaxPeer = 100;

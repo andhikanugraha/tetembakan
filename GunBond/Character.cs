@@ -17,7 +17,7 @@ namespace GunBond
 	{
 		public float forcePower = 50;
 		protected KeyboardState keyState;
-		protected KeyboardState oldState;
+		protected int oldState;
 		protected Projectile p;
 		protected int turn;
 		public float health = 100;
@@ -25,6 +25,7 @@ namespace GunBond
 		protected bool increasePower;
 		public float wind;
 		private Random r = new Random();
+		public bool blowsToRight;
 
 		protected override void Dispose (bool disposing)
 		{
@@ -60,7 +61,21 @@ namespace GunBond
 
 		private void nextWind()
 		{
-			this.wind = (float)(r.Next (-3, 4));
+			if (blowsToRight)
+			{
+				++this.wind;
+			}
+			else
+			{
+				--this.wind;
+			}
+			
+			if ((this.wind == 4) || (this.wind == -4))
+			{
+				blowsToRight = !blowsToRight; // change direction
+			}
+
+			//this.wind = (float)(r.Next (-3, 4));
 		}
 
 		protected virtual void HandleInput(GameTime gameTime)
@@ -87,7 +102,7 @@ namespace GunBond
 
 			body.ApplyLinearImpulse(force, body.Position);
 
-			oldState = keyState;
+			//oldState = keyState;
 		}
 	}
 }
